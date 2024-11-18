@@ -10,25 +10,17 @@ import java.util.List;
 public class Inventory
 {
     private List<Item> items;
-    private int maxWeight;
-
     /**
      * Constructor for objects of class Inventory
      */
-    public Inventory(int maxWeight)
+    public Inventory()
     {
         items = new ArrayList<>();
-        this.maxWeight = maxWeight;
     }
     
-    public boolean addItem(Item item)
+    public void addItem(Item item)
     {
-        if (getTotalWeight() + item.getWeight() > maxWeight) {
-            System.out.println("Cannot add item. Max weight exceeded");
-            return false;
-        }
         items.add(item);
-        return true;
     }
     
     public boolean removeItem(Item item)
@@ -62,11 +54,6 @@ public class Inventory
         return totalWeight;
     }
     
-    public int getMaxWeight()
-    {
-        return maxWeight;
-    }
-    
     public Item getItem(String itemName)
     {
         //make better implementation
@@ -77,10 +64,4 @@ public class Inventory
         }
         return null;
     }
-    
-    public boolean isFull() 
-    {
-        return getTotalWeight() >= maxWeight;
-    }
-    
 }

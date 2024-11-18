@@ -99,7 +99,7 @@ public class CommandHandler
     {
         if(!command.hasSecondWord()) {
             // if there is no second word, we don't know where to go...
-            System.out.println("Pick up which item?");
+            System.out.println("There is no such item here!");
             return;
         }
         
@@ -112,8 +112,14 @@ public class CommandHandler
         if (item == null) {
             System.out.println("This is not an item!");
         } else {
-            currentRoom.removeItem(itemName);
-            inventory.addItem(item);
+            if (gameState.canPickUp(item)) {
+                currentRoom.removeItem(itemName);
+                inventory.addItem(item);
+                System.out.println("You picked up " + item.getName());
+            } else {
+                System.out.println("You can't carry any more items. Max weight reached.");
+            }
+
         }
     }
     

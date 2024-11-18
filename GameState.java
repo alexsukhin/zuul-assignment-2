@@ -9,12 +9,17 @@ public class GameState
 {
     private Room currentRoom;
     private Inventory inventory;
+    private final int maxWeight = 50;
     
     public GameState(Room startingRoom) {
         this.currentRoom = startingRoom;
-        inventory = new Inventory(6);
+        inventory = new Inventory();
     }
     
+    public boolean canPickUp(Item item)
+    {
+        return inventory.getTotalWeight() + item.getWeight() <= maxWeight;
+    }
     
     public void setCurrentRoom(Room room)
     {
@@ -30,4 +35,6 @@ public class GameState
     {
         return inventory;
     }
+
 }
+
