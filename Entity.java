@@ -25,5 +25,5 @@ public abstract class Entity
         return description;
     }
     
-    public abstract void interact();
+    public abstract void interact(EntityHandler handler);
 }

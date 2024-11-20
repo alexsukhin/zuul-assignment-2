@@ -20,6 +20,7 @@ public class Room
     private String description;
     private HashMap<String, Room> exits;        // stores exits of this room.
     private HashMap<String, Item> items;
+    private HashMap<String, Entity> entities;
 
     /**
      * Create a room described "description". Initially, it has
@@ -32,6 +33,7 @@ public class Room
         this.description = description;
         exits = new HashMap<>();
         items = new HashMap<>();
+        entities = new HashMap<>();
     }
 
     /**
@@ -47,6 +49,11 @@ public class Room
     public void addItem(Item item)
     {
         items.put(item.getName().toLowerCase().strip(), item);
+    }
+    
+    public void addEntity(Entity entity)
+    {
+        entities.put(entity.getName().toLowerCase().strip(), entity);
     }
     
     public void removeItem(String itemName)
@@ -95,7 +102,7 @@ public class Room
         return returnString;
     }
     
-        public String getItemString()
+    public String getItemString()
     {
         String returnString = "Items:";
         Set<String> keys = items.keySet();

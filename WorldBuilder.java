@@ -64,4 +64,8 @@ public class WorldBuilder
         rooms.get("camp").addItem(new Item("Tools", "A set of tools, possibly useful for fixing the broken radio.", 4));
         rooms.get("station").addItem(new Item("Battery", "A spare battery, could be useful for powering devices.", 1));
     }
+    
+    public void placeEntities(Map<String, Room> rooms, Map<String, Item> items) {
+        rooms.get("lake").addEntity(new Unlockable("lake"), "", );
+    }
 }

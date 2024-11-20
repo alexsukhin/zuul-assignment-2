@@ -15,7 +15,7 @@ public class Fireplace extends Entity
     }
     
     @Override
-    public void interact()
+    public void interact(EntityHandler Handler)
     {
         if (hasFire) {
             System.out.println("There is warmth! +5 to heat.");
