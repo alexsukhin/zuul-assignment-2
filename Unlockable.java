@@ -10,26 +10,44 @@ public class Unlockable extends Entity
     // instance variables - replace the example below with your own
     private boolean isUnlocked;
     private Item requiredItem;
+    private String lockedMessage;
+    private String unlockedMessage;
     
-    public Unlockable(String name, String description, Item requiredItem) {
+    public Unlockable(String name, String description, Item requiredItem, String lockedMessage, String unlockedMessage) {
         super(name, description);
         this.isUnlocked = false;
         this.requiredItem = requiredItem;
+        this.lockedMessage = lockedMessage;
+        this.unlockedMessage = unlockedMessage;
     }
     
     @Override
-    public void interact(EntityHandler handler)
+    public void interact(GameState gameState)
     {
-        if (isUnlocked) {
-            handler.handleInteraction(this, true);
+        Inventory inventory = gameState.getInventory();
+        if (isUnlocked()) {
+            System.out.println(unlockedMessage);
+        } else if (inventory.hasItem(requiredItem)) {
+            unlock();
+            System.out.println(unlockedMessage);
         } else {
-            handler.handleInteraction(this, false);
+            System.out.println(lockedMessage);
         }
     }
     
     public Item getRequiredItem()
     {
         return requiredItem;
+    }
+    
+    public String getUnlockedMessage()
+    {
+        return unlockedMessage;
+    }
+    
+    public String getLockedMessage()
+    {
+        return lockedMessage;
     }
     
     public boolean isUnlocked()

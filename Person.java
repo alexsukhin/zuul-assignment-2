@@ -5,29 +5,38 @@
  * @author (your name)
  * @version (a version number or a date)
  */
-public class Person
+public class Person extends Entity 
 {
-    // instance variables - replace the example below with your own
-    private int x;
-
-    /**
-     * Constructor for objects of class Person
-     */
-    public Person()
-    {
-        // initialise instance variables
-        x = 0;
+    private Item heldItem;
+    private Item requiredItem;
+    private boolean hasRequiredItem;
+    private String noItemMessage;
+    
+    public Person(String name, String description, Item heldItem, Item requiredItem, String noItemMessage) {
+        super(name, description);
+        this.heldItem = heldItem;
+        this.requiredItem = requiredItem;
+        this.noItemMessage = noItemMessage;
+        this.hasRequiredItem = false;
     }
+    
+    @Override
+    public void interact(GameState gameState) {
+        
+        Inventory inventory = gameState.getInventory();
+        
+        if (hasRequiredItem) {
+            System.out.println(getName() + "has nothing more to give.");
+        } else if (inventory.hasItem(requiredItem)) {
+            inventory.addItem(heldItem);
+            System.out.println(getName() + "gives you a " + heldItem.getName() + ": " + heldItem.getDescription());
+            hasRequiredItem = true;
+            
+            inventory.removeItem(requiredItem);
+            System.out.println(getName() + "takes the " + requiredItem.getName() + " in exchange");
+        } else {
+            System.out.println(noItemMessage);
+        }
 
-    /**
-     * An example of a method - replace this comment with your own
-     *
-     * @param  y  a sample parameter for a method
-     * @return    the sum of x and y
-     */
-    public int sampleMethod(int y)
-    {
-        // put your code here
-        return x + y;
     }
 }

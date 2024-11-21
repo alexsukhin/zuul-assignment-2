@@ -31,6 +31,7 @@ public class Game
         WorldBuilder builder = new WorldBuilder();
         Map<String, Room> rooms = builder.createRooms();
         builder.placeItems(rooms);
+        builder.placeEntities(rooms);
         
         gameState = new GameState(rooms.get("wreck"));        
         parser = new Parser();
@@ -66,7 +67,7 @@ public class Game
         System.out.println("Type 'help' if you need help.");
         System.out.println();
         System.out.println(gameState.getCurrentRoom().getLongDescription());
-        System.out.println(gameState.getCurrentRoom().getItemString());
+        System.out.println(gameState.getCurrentRoom().getEntitiesString());
     }
 
 }

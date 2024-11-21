@@ -12,17 +12,18 @@ public class WorldBuilder
     public Map<String, Room> createRooms() {
         Map<String, Room> rooms = new HashMap<>();
 
-        // Create rooms
-        rooms.put("wreck", new Room("amid the remains of your crashed plane, frigid winds sweeping through"));
-        rooms.put("cabin", new Room("inside an old wooden cabin, cold but sheltered from the wind"));
-        rooms.put("forest", new Room("surrounded by dense, snow-laden trees, with quiet animal tracks nearby"));
-        rooms.put("lake", new Room("at the edge of a vast frozen lake, cracks spiderwebbing beneath your feet"));
-        rooms.put("camp", new Room("in a destroyed camp, ravaged by wolves, with torn tents and scattered belongings"));
-        rooms.put("cave", new Room("in a glistening ice cave, the air chilling and echoes bouncing around"));
-        rooms.put("station", new Room("inside an abandoned research station, tools scattered across tables"));
-        rooms.put("storm", new Room("in the midst of a blinding snowstorm, with ice and snow whipping around you"));
-        rooms.put("rescue", new Room("at a flat, open expanse, perfect for signaling with the remnants of an old fire nearby"));
-
+        // Create rooms with concise, immersive descriptions and names as separate parameters
+        rooms.put("wreck", new Room("Wreck", "amid the wreckage of your crashed plane, frigid winds sweeping through the broken remains."));
+        rooms.put("cabin", new Room("Cabin", "inside an old wooden cabin, cold but sheltered from the wind. A cold fireplace waits for firewood."));
+        rooms.put("forest", new Room("Forest", "surrounded by dense, snow-laden trees, with quiet animal tracks leading deeper into the woods."));
+        rooms.put("lake", new Room("Lake", "at the edge of a vast frozen lake, cracks spiderwebbing beneath your feet."));
+        rooms.put("camp", new Room("Camp", "in a destroyed camp, torn tents and scattered belongings tell of a hasty departure."));
+        rooms.put("cave", new Room("Cave", "in a glistening ice cave, the air cold and echoes bouncing off the walls. An old man sits nearby, wrapped in a heavy coat."));
+        rooms.put("station", new Room("Station", "inside an abandoned research station, with tools and equipment left scattered across the tables."));
+        rooms.put("storm", new Room("Storm", "in the midst of a blinding snowstorm, ice and snow whipping around you in every direction."));
+        rooms.put("rescue", new Room("Rescue", "at a flat, open expanse, the remnants of an old fire pit the only signs of life in this desolate place."));
+        
+        
         // Set room exits
         rooms.get("wreck").setExit("east", rooms.get("cabin"));
         rooms.get("wreck").setExit("north", rooms.get("lake"));
@@ -35,14 +36,15 @@ public class WorldBuilder
         
         rooms.get("lake").setExit("south", rooms.get("wreck"));
         rooms.get("lake").setExit("east", rooms.get("cabin"));
-        rooms.get("lake").setExit("north", rooms.get("camp"));
+        rooms.get("lake").setExit("north", rooms.get("cave"));
         
-        rooms.get("camp").setExit("north", rooms.get("cave"));
-        rooms.get("camp").setExit("south", rooms.get("lake"));
-        
-        rooms.get("cave").setExit("south", rooms.get("camp"));
+        rooms.get("cave").setExit("south", rooms.get("lake"));
+        rooms.get("cave").setExit("west", rooms.get("camp"));
         rooms.get("cave").setExit("north", rooms.get("storm"));
         rooms.get("cave").setExit("east", rooms.get("station"));
+        
+        rooms.get("camp").setExit("east", rooms.get("cave"));
+        rooms.get("camp").setExit("north", rooms.get("storm"));
         
         rooms.get("station").setExit("west", rooms.get("cave"));
         rooms.get("station").setExit("north", rooms.get("storm"));
@@ -50,6 +52,7 @@ public class WorldBuilder
         rooms.get("storm").setExit("south", rooms.get("cave"));
         rooms.get("storm").setExit("east", rooms.get("station"));
         rooms.get("storm").setExit("north", rooms.get("rescue"));
+        rooms.get("storm").setExit("west", rooms.get("camp"));
 
         return rooms;
     }
@@ -62,10 +65,38 @@ public class WorldBuilder
         rooms.get("forest").addItem(new Item("Armour", "Thick leather armour, insulated to keep you warm.", 5));
         rooms.get("camp").addItem(new Item("Torch", "A burning torch that can scare off wild animals.", 2));
         rooms.get("camp").addItem(new Item("Tools", "A set of tools, possibly useful for fixing the broken radio.", 4));
-        rooms.get("station").addItem(new Item("Battery", "A spare battery, could be useful for powering devices.", 1));
     }
     
-    public void placeEntities(Map<String, Room> rooms, Map<String, Item> items) {
-        rooms.get("lake").addEntity(new Unlockable("lake"), "", );
+    public void placeEntities(Map<String, Room> rooms) {
+        
+        rooms.get("lake").addEntity(
+            new Unlockable(
+                "lake",
+                "You are at a frozen lake that blocks your path. You need a rope to cross it safely.",
+                rooms.get("cabin").getItem("rope"),
+                "The frozen lake is too dangerous to cross without assistance. The rope is your only chance.",
+                "You successfully crossed the frozen lake using the rope."
+            )
+        );
+        
+        rooms.get("cabin").addEntity(
+            new Fireplace(
+                "fireplace", 
+                "You are near a cold fireplace, perfect for lighting a fire if only you had firewood.",
+                rooms.get("forest").getItem("firewood")
+            )
+        );
+        
+        rooms.get("cave").addEntity(
+            new Person(
+                "Old Man",
+                "You are facing an old man sitting in the cave, wrapped in a heavy coat. He eyes you cautiously.",
+                new Item("Battery", "A spare battery, could be useful for powering devices.", 1),
+                rooms.get("camp").getItem("torch"),
+                "The old man looks at you and says, 'Bring me a torch first, and I might help you.'"
+            )
+        );
+
     }
+
 }

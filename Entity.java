@@ -25,5 +25,5 @@ public abstract class Entity
         return description;
     }
     
-    public abstract void interact(EntityHandler handler);
+    public abstract void interact(GameState gameState);
 }

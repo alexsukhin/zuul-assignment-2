@@ -45,6 +45,9 @@ public class CommandHandler
             case "search":
                 search(command, gameState.getCurrentRoom());
                 break;
+            case "examine":
+                examine(command, gameState.getCurrentRoom());
+                break;
             default:
                 System.out.println("I don't understand this command.");
         }
@@ -86,12 +89,13 @@ public class CommandHandler
         Room nextRoom = currentRoom.getExit(direction);
 
         if (nextRoom == null) {
-            System.out.println("There is no door!");
+            System.out.println("There is no door!");    
         }
         else {
             gameState.setCurrentRoom(nextRoom);
-            System.out.println(currentRoom.getLongDescription());
-            System.out.println(currentRoom.getItemString());
+            currentRoom = gameState.getCurrentRoom();
+            System.out.println(currentRoom.getLongDescription());   
+            System.out.println(currentRoom.getEntitiesString());
         }
     }
     
@@ -153,6 +157,32 @@ public class CommandHandler
             System.out.println(currentRoom.getItemString());
         }
     }
+    
+    private void examine(Command command, Room currentRoom)
+    {
+        if (!command.hasSecondWord()) {
+            System.out.println("Examine what?");
+            return;
+        }
+        
+        String objectName = command.getSecondWord();
+        
+        if (currentRoom.hasItem(objectName)) {
+            Item item = currentRoom.getItem(objectName);
+            System.out.println("You examine the " + item.getName() + ": " + item.getDescription());
+            return;
+        }
+        
+        if (currentRoom.hasEntity(objectName)) {
+            Entity entity = currentRoom.getEntity(objectName);
+            System.out.println("You examine the " + entity.getName() + ": " + entity.getDescription());
+            return;
+        }
+        
+        System.out.println("There is no such thing to examine here.");
+        
+    }
+    
 
     /** 
      * "Quit" was entered. Check the rest of the command to see
