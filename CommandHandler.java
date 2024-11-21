@@ -48,6 +48,9 @@ public class CommandHandler
             case "examine":
                 examine(command, gameState.getCurrentRoom());
                 break;
+            case "use":
+                use(command, gameState);
+                break;
             default:
                 System.out.println("I don't understand this command.");
         }
@@ -134,9 +137,10 @@ public class CommandHandler
             return;
         }
         
-        String itemName = command.getSecondWord();
         Room currentRoom = gameState.getCurrentRoom();
         Inventory inventory = gameState.getInventory();
+        
+        String itemName = command.getSecondWord();
         
         Item item = inventory.getItem(itemName);
 
@@ -181,6 +185,44 @@ public class CommandHandler
         
         System.out.println("There is no such thing to examine here.");
         
+    }
+    
+    public void use(Command command, GameState gameState)
+    {
+        if (!command.hasSecondWord() && !command.hasThirdWord()) {
+            System.out.println("Use what?");
+            return;
+        } else if (!command.hasThirdWord()) {
+            System.out.println("Use the item on what?");
+            return;
+        }
+        
+        Room currentRoom = gameState.getCurrentRoom();
+        Inventory inventory = gameState.getInventory();
+        
+        String itemName = command.getSecondWord();
+        String entityName = command.getThirdWord();
+        
+        Item item = inventory.getItem(itemName);
+        Entity entity = currentRoom.getEntity(entityName);
+    
+        if (item == null) {
+            System.out.println("Your item is not a valid item!");
+            return;
+        } else if (entity == null) {
+            System.out.println("Your entity is not a valid entity!");
+            return;
+        }
+        
+        if (entity instanceof Unlockable) {
+            Unlockable unlockable = (Unlockable) entity;
+            unlockable.interact(gameState);
+            
+        } else if (entity instanceof Person) {
+            Person person = (Person) entity;
+            person.interact(gameState);
+            
+        }
     }
     
 
