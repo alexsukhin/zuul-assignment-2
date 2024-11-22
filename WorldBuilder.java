@@ -1,4 +1,3 @@
-import java.util.Map;
 import java.util.HashMap;
 
 /**
@@ -9,8 +8,8 @@ import java.util.HashMap;
  */
 public class WorldBuilder
 {
-    public Map<String, Room> createRooms() {
-        Map<String, Room> rooms = new HashMap<>();
+    public HashMap<String, Room> createRooms() {
+        HashMap<String, Room> rooms = new HashMap<>();
 
         // Create rooms with concise, immersive descriptions and names as separate parameters
         rooms.put("wreck", new Room("Wreck", "amid the wreckage of your crashed plane, frigid winds sweeping through the broken remains."));
@@ -57,7 +56,7 @@ public class WorldBuilder
         return rooms;
     }
 
-    public void placeItems(Map<String, Room> rooms) {
+    public void placeItems(HashMap<String, Room> rooms) {
         // Create and place items
         rooms.get("wreck").addItem(new Item("Radio", "An old radio transmitter. It looks like it could be repaired.", 3));
         rooms.get("cabin").addItem(new Item("Rope", "A sturdy rope, useful for climbing or crossing difficult terrain.", 2));
@@ -67,12 +66,11 @@ public class WorldBuilder
         rooms.get("camp").addItem(new Item("Tools", "A set of tools, possibly useful for fixing the broken radio.", 4));
     }
     
-    public void placeEntities(Map<String, Room> rooms) {
+    public void placeEntities(HashMap<String, Room> rooms) {
         
         rooms.get("lake").addEntity(
             new Unlockable(
                 "lake",
-                "You are at a frozen lake that blocks your path. You need a rope to cross it safely.",
                 rooms.get("cabin").getItem("rope"),
                 "The frozen lake is too dangerous to cross without assistance. The rope is your only chance.",
                 "You successfully crossed the frozen lake using the rope."
@@ -81,16 +79,14 @@ public class WorldBuilder
         
         rooms.get("cabin").addEntity(
             new Fireplace(
-                "fireplace", 
-                "You are near a cold fireplace, perfect for lighting a fire if only you had firewood.",
+                "fireplace",
                 rooms.get("forest").getItem("firewood")
             )
         );
         
         rooms.get("cave").addEntity(
             new Person(
-                "Old Man",
-                "You are facing an old man sitting in the cave, wrapped in a heavy coat. He eyes you cautiously.",
+                "old-man",
                 new Item("Battery", "A spare battery, could be useful for powering devices.", 1),
                 rooms.get("camp").getItem("torch"),
                 "The old man looks at you and says, 'Bring me a torch first, and I might help you.'"

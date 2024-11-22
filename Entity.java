@@ -5,25 +5,18 @@
  * @author (your name)
  * @version (a version number or a date)
  */
-public abstract class Entity
-{
+public abstract class Entity {
     private String name;
-    private String description;
-    
-    public Entity(String name, String description) {
+
+    public Entity(String name) {
         this.name = name;
-        this.description = description;
     }
-    
-    public String getName()
-    {
+
+    public String getName() {
         return name;
     }
-    
-    public String getDescription()
-    {
-        return description;
-    }
-    
-    public abstract void interact(GameState gameState);
+
+    public abstract void examine(GameState gameState);
+
+    public abstract void interact(GameState gameState, Item item);
 }

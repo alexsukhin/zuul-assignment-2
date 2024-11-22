@@ -1,3 +1,4 @@
+import java.util.List;
 
 /**
  * Write a description of class MovingEntity here.
@@ -5,29 +6,32 @@
  * @author (your name)
  * @version (a version number or a date)
  */
-public class MovingEntity
+public abstract class MovingEntity extends Entity
 {
-    // instance variables - replace the example below with your own
-    private int x;
-
-    /**
-     * Constructor for objects of class MovingEntity
-     */
-    public MovingEntity()
+    private List<Room> rooms;
+    private int currentRoomIndex;
+    
+    public MovingEntity(String name, List<Room> rooms)
     {
-        // initialise instance variables
-        x = 0;
+        super(name);
+        this.rooms = rooms;
+        this.currentRoomIndex = 0;
     }
-
-    /**
-     * An example of a method - replace this comment with your own
-     *
-     * @param  y  a sample parameter for a method
-     * @return    the sum of x and y
-     */
-    public int sampleMethod(int y)
+    
+    public Room getCurrentRoom()
     {
-        // put your code here
-        return x + y;
+        return rooms.get(currentRoomIndex);
     }
+    
+    public void move()
+    {
+        currentRoomIndex = (currentRoomIndex + 1) % rooms.size();
+    }
+    
+    @Override
+    public abstract void examine(GameState gameState);
+
+    @Override
+    public abstract void interact(GameState gameState, Item item);
+
 }

@@ -12,8 +12,8 @@ public class Person extends Entity
     private boolean hasRequiredItem;
     private String noItemMessage;
     
-    public Person(String name, String description, Item heldItem, Item requiredItem, String noItemMessage) {
-        super(name, description);
+    public Person(String name, Item heldItem, Item requiredItem, String noItemMessage) {
+        super(name);
         this.heldItem = heldItem;
         this.requiredItem = requiredItem;
         this.noItemMessage = noItemMessage;
@@ -21,22 +21,30 @@ public class Person extends Entity
     }
     
     @Override
-    public void interact(GameState gameState) {
-        
-        Inventory inventory = gameState.getInventory();
-        
+    public void examine(GameState gameState) {
         if (hasRequiredItem) {
-            System.out.println(getName() + "has nothing more to give.");
-        } else if (inventory.hasItem(requiredItem)) {
-            inventory.addItem(heldItem);
-            System.out.println(getName() + "gives you a " + heldItem.getName() + ": " + heldItem.getDescription());
-            hasRequiredItem = true;
-            
-            inventory.removeItem(requiredItem);
-            System.out.println(getName() + "takes the " + requiredItem.getName() + " in exchange");
+            System.out.println(getName() + " has nothing more to give.");
         } else {
             System.out.println(noItemMessage);
         }
+    }
 
+    @Override
+    public void interact(GameState gameState, Item item) {
+        if (hasRequiredItem) {
+            System.out.println(getName() + " has already given you something.");
+        } else if (item.equals(requiredItem)) {
+            gameState.getInventory().addItem(heldItem);
+            gameState.getInventory().removeItem(item);
+            hasRequiredItem = true;
+            System.out.println(getName() + " gives you a " + heldItem.getName() + ".");
+        } else {
+            System.out.println(getName() + " doesn't want that item.");
+        }
+    }
+    
+    public Item getRequiredItem()
+    {
+        return requiredItem;
     }
 }

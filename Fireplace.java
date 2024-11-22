@@ -7,27 +7,34 @@
  */
 public class Fireplace extends Unlockable
 {
-    public Fireplace(String name, String description, Item requiredItem) {
-        super(name, description, requiredItem, 
+    public Fireplace(String name, Item requiredItem) {
+        super(name, requiredItem, 
               "The fireplace is cold and needs firewood to start a fire.", 
               "You put firewood in the fireplace and light it. Warmth spreads around!");
     }
     
     @Override
-    public void interact(GameState gameState) {
+    public void examine(GameState gameState) {
         if (isUnlocked()) {
-            System.out.println("The fire is burning brightly, keeping you warm. +5 to heat.");
-            // Optionally, adjust player status here
+            System.out.println("The fire is burning brightly, keeping you warm.");
         } else {
-            // Use the existing unlocking logic
-            Inventory inventory = gameState.getInventory();
-            if (inventory.hasItem(getRequiredItem())) {
-                unlock(); // This sets `isUnlocked` to true
-                inventory.removeItem(getRequiredItem());
-                System.out.println(getUnlockedMessage());
-            } else {
-                System.out.println(getLockedMessage());
-            }
+            System.out.println(getLockedMessage());
+        }
+    }
+    
+    @Override
+    public void interact(GameState gameState, Item item) {
+        if (isUnlocked()) {
+            System.out.println("The fire is already burning brightly.");
+            return;
+        }
+
+        if (item.equals(getRequiredItem())) {
+            unlock();
+            gameState.getInventory().removeItem(item);
+            System.out.println(getUnlockedMessage());
+        } else {
+            System.out.println("The " + item.getName() + " cannot be used on the fireplace.");
         }
     }
 }

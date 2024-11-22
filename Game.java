@@ -1,4 +1,4 @@
-import java.util.Map;
+import java.util.HashMap;
 
  /**
  *  This class is the main class of the "World of Zuul" application. 
@@ -29,7 +29,7 @@ public class Game
     public Game() 
     {
         WorldBuilder builder = new WorldBuilder();
-        Map<String, Room> rooms = builder.createRooms();
+        HashMap<String, Room> rooms = builder.createRooms();
         builder.placeItems(rooms);
         builder.placeEntities(rooms);
         

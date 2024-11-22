@@ -46,10 +46,16 @@ public class CommandHandler
                 search(command, gameState.getCurrentRoom());
                 break;
             case "examine":
-                examine(command, gameState.getCurrentRoom());
+                examine(command, gameState);
+                break;
+            case "interact":
+                interact(command, gameState);
                 break;
             case "use":
                 use(command, gameState);
+                break;
+            case "give":
+                give(command, gameState);
                 break;
             default:
                 System.out.println("I don't understand this command.");
@@ -162,8 +168,10 @@ public class CommandHandler
         }
     }
     
-    private void examine(Command command, Room currentRoom)
+    private void examine(Command command, GameState gameState)
     {
+        Room currentRoom = gameState.getCurrentRoom();
+        
         if (!command.hasSecondWord()) {
             System.out.println("Examine what?");
             return;
@@ -179,11 +187,34 @@ public class CommandHandler
         
         if (currentRoom.hasEntity(objectName)) {
             Entity entity = currentRoom.getEntity(objectName);
-            System.out.println("You examine the " + entity.getName() + ": " + entity.getDescription());
+            entity.examine(gameState);
             return;
         }
         
         System.out.println("There is no such thing to examine here.");
+        
+    }
+    
+        private void interact(Command command, GameState gameState)
+    {
+        /*
+        Room currentRoom = gameState.getCurrentRoom();
+        
+        if (!command.hasSecondWord()) {
+            System.out.println("Interact with what?");
+            return;
+        }
+        
+        String objectName = command.getSecondWord();
+        
+        if (currentRoom.hasEntity(objectName)) {
+            Entity entity = currentRoom.getEntity(objectName);
+            entity.interact(gameState);
+            return;
+        }
+        
+        System.out.println("There is no such thing to interact with here.");
+        */
         
     }
     
@@ -216,12 +247,41 @@ public class CommandHandler
         
         if (entity instanceof Unlockable) {
             Unlockable unlockable = (Unlockable) entity;
-            unlockable.interact(gameState);
+            unlockable.interact(gameState, item);
             
-        } else if (entity instanceof Person) {
+        }
+    }
+    
+    public void give(Command command, GameState gameState)
+    {
+        if (!command.hasSecondWord() && !command.hasThirdWord()) {
+            System.out.println("Give what?");
+            return;
+        } else if (!command.hasThirdWord()) {
+            System.out.println("Give the item to who?");
+            return;
+        }
+        
+        Room currentRoom = gameState.getCurrentRoom();
+        Inventory inventory = gameState.getInventory();
+        
+        String itemName = command.getSecondWord();
+        String entityName = command.getThirdWord();
+        
+        Item item = inventory.getItem(itemName);
+        Entity entity = currentRoom.getEntity(entityName);
+    
+        if (item == null) {
+            System.out.println("Your item is not a valid item!");
+            return;
+        } else if (entity == null) {
+            System.out.println("Your entity is not a valid entity!");
+            return;
+        }
+        
+        if (entity instanceof Person) {
             Person person = (Person) entity;
-            person.interact(gameState);
-            
+            person.interact(gameState, item);
         }
     }
     
