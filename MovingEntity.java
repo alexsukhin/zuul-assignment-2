@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Random;
 
 /**
  * Write a description of class MovingEntity here.
@@ -23,15 +24,38 @@ public abstract class MovingEntity extends Entity
         return rooms.get(currentRoomIndex);
     }
     
-    public void move()
+    public void move(GameState gameState)
     {
-        currentRoomIndex = (currentRoomIndex + 1) % rooms.size();
+        Room currentRoom = rooms.get(currentRoomIndex);
+        Room playerRoom = gameState.getPreviousRoom();
+        Random random = new Random();
+        int attempts = 100;
+        
+        while (attempts > 0) {
+            int randomRoomIndex = random.nextInt(rooms.size());
+            Room nextRoom = rooms.get(randomRoomIndex);
+            
+            if (randomRoomIndex != currentRoomIndex && canMoveTo(nextRoom, playerRoom)) {
+                currentRoomIndex = randomRoomIndex;
+                
+                currentRoom.removeEntity(this.getName());
+                nextRoom.addEntity(this);
+                
+                return;
+            }
+    
+            attempts--;
+        }
+        
+        System.out.println(getName() + " cannot find a suitable room to move to.");
     }
+    
+    public abstract boolean canMoveTo(Room targetRoom, Room playerRoom);
     
     @Override
     public abstract void examine(GameState gameState);
 
     @Override
     public abstract void interact(GameState gameState, Item item);
-
+    
 }

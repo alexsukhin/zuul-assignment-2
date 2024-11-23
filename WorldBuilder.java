@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * Write a description of class WorldBuilder here.
@@ -64,6 +65,7 @@ public class WorldBuilder
         rooms.get("forest").addItem(new Item("Armour", "Thick leather armour, insulated to keep you warm.", 5));
         rooms.get("camp").addItem(new Item("Torch", "A burning torch that can scare off wild animals.", 2));
         rooms.get("camp").addItem(new Item("Tools", "A set of tools, possibly useful for fixing the broken radio.", 4));
+        rooms.get("lake").addItem(new Item("Knife", "A knife, useful for killing animals.", 2));
     }
     
     public void placeEntities(HashMap<String, Room> rooms) {
@@ -90,6 +92,33 @@ public class WorldBuilder
                 new Item("Battery", "A spare battery, could be useful for powering devices.", 1),
                 rooms.get("camp").getItem("torch"),
                 "The old man looks at you and says, 'Bring me a torch first, and I might help you.'"
+            )
+        );
+        
+        rooms.get("camp").addEntity(
+            new SnowWolf(
+                new ArrayList<Room>() {
+                    {
+                        add(rooms.get("camp"));
+                        add(rooms.get("storm"));
+                        add(rooms.get("station"));
+                    }
+                },
+                rooms.get("lake").getItem("knife")
+            )
+        );
+        
+        rooms.get("forest").addEntity(
+            new Deer(
+                new ArrayList<Room>() {
+                    {
+                        add(rooms.get("forest"));
+                        add(rooms.get("cabin"));
+                        add(rooms.get("wreck"));
+                        add(rooms.get("lake"));
+                    }
+                },
+                rooms.get("lake").getItem("knife")
             )
         );
 

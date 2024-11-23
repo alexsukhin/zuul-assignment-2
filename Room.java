@@ -63,6 +63,11 @@ public class Room
         items.remove(itemName.toLowerCase());
     }
     
+    public void removeEntity(String entityName)
+    {
+        entities.remove(entityName.toLowerCase());
+    }
+    
     public boolean hasItem(String itemName)
     {   
         return items.containsKey(itemName.toLowerCase());
@@ -90,8 +95,8 @@ public class Room
      * @return A long description of this room
      */
     public String getLongDescription()
-    {
-        return "You are " + description + ".\n" + getExitString();
+    {;
+        return "You are " + description + ".\n" + getExitString() + "\n" + getEntitiesString();
     }
     
     public String getName()

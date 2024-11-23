@@ -8,9 +8,18 @@ import java.util.List;
  */
 public class Deer extends MovingEntity
 {
-    public Deer(List<Room> rooms)
+    private Item knife;
+    
+    public Deer(List<Room> rooms, Item knife)
     {
-        super("Deer", rooms);
+        super("deer", rooms);
+        this.knife = knife;
+    }
+    
+    @Override
+    public boolean canMoveTo(Room targetRoom, Room playerRoom)
+    {
+        return true;
     }
     
     @Override
@@ -22,6 +31,10 @@ public class Deer extends MovingEntity
     @Override
     public void interact(GameState gameState, Item item)
     {
-        return;
+        if (item.equals(knife)) {
+            //kill deer and gain leather
+        } else {
+            System.out.println("That item doesn't work here.");
+        }
     }
 }

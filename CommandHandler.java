@@ -57,6 +57,9 @@ public class CommandHandler
             case "give":
                 give(command, gameState);
                 break;
+            case "back":
+                back(command,gameState);
+                break;
             default:
                 System.out.println("I don't understand this command.");
         }
@@ -96,15 +99,18 @@ public class CommandHandler
         String direction = command.getSecondWord();
         Room currentRoom = gameState.getCurrentRoom();
         Room nextRoom = currentRoom.getExit(direction);
-
+        
         if (nextRoom == null) {
-            System.out.println("There is no door!");    
-        }
-        else {
+            System.out.println("There is no door!");
+        } else {
+            gameState.addRoomToStack(currentRoom);
             gameState.setCurrentRoom(nextRoom);
-            currentRoom = gameState.getCurrentRoom();
-            System.out.println(currentRoom.getLongDescription());   
-            System.out.println(currentRoom.getEntitiesString());
+            
+            if (gameState.handleEntityEncounters(currentRoom)) {
+                System.out.println(currentRoom.getLongDescription());
+            } else {
+                System.out.println(nextRoom.getLongDescription());
+            }
         }
     }
     
@@ -249,6 +255,9 @@ public class CommandHandler
             Unlockable unlockable = (Unlockable) entity;
             unlockable.interact(gameState, item);
             
+        } else if (entity instanceof Deer) {
+            Deer deer = (Deer) entity;
+            deer.interact(gameState, item);
         }
     }
     
@@ -282,6 +291,16 @@ public class CommandHandler
         if (entity instanceof Person) {
             Person person = (Person) entity;
             person.interact(gameState, item);
+        }
+    }
+    
+    public void back(Command command, GameState gameState)
+    {
+        if (!gameState.Back()) {
+            System.out.println("There is no previous room to go back to!");
+        } else {
+            System.out.println("Returning to previous room!");
+            System.out.println(gameState.getCurrentRoom().getLongDescription());   
         }
     }
     

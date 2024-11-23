@@ -13,7 +13,7 @@ public class CraftingTable extends Entity
     
     public CraftingTable(String name) {
         super(name);
-        this.   recipes = new HashMap<>();
+        this.recipes = new HashMap<>();
     }
     
     
