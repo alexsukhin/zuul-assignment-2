@@ -54,8 +54,5 @@ public abstract class MovingEntity extends Entity
     
     @Override
     public abstract void examine(GameState gameState);
-
-    @Override
-    public abstract void interact(GameState gameState, Item item);
     
 }

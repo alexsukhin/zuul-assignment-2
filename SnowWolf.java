@@ -22,17 +22,15 @@ public class SnowWolf extends MovingEntity
         
         System.out.println("The Snow Wolf growls menacingly. It is ready to attack!");
         
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            System.out.println("Something interrupted the game flow!");
-        }
+        Game.delay(1000);
         
         if (inventory.hasItem(knife)) {
-             System.out.println("The Snow Wolf attacks, but you fight back with your knife!");
-             System.out.println("You kill the Snow Wolf! It will no longer threaten you.");
-             return true;
+            System.out.println("The Snow Wolf attacks, but you fight back with your knife!");             
+            System.out.println("You kill the Snow Wolf! It will no longer threaten you.");
+             
+            Game.delay(1000);
+             
+            return true;
         } else {
             System.out.println("You have no weapon! The Snow Wolf forces you to flee!");
             move(gameState);
@@ -50,12 +48,6 @@ public class SnowWolf extends MovingEntity
     
     @Override
     public void examine(GameState gameState)
-    {
-        return;
-    }
-
-    @Override
-    public void interact(GameState gameState, Item item)
     {
         return;
     }

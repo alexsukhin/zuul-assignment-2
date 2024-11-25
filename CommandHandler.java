@@ -21,8 +21,11 @@ public class CommandHandler
             System.out.println("I don't know what you mean...");
             return false;
         }
+        
+        Room currentRoom = gameState.getCurrentRoom();
+        Inventory inventory = gameState.getInventory();
 
-         String commandWord = command.getCommandWord();
+        String commandWord = command.getCommandWord();
         switch (commandWord) {
             case "help":
                 printHelp(parser);
@@ -34,31 +37,34 @@ public class CommandHandler
                 wantToQuit = quit(command);
                 break;
             case "inventory":
-                gameState.getInventory().showInventory();
+                inventory.showInventory();
                 break;
             case "get":
                 pickupItem(command, gameState);
                 break;
             case "drop":
-                dropItem(command, gameState);
+                dropItem(command, currentRoom, inventory);
                 break;
             case "search":
-                search(command, gameState.getCurrentRoom());
+                search(command, currentRoom);
                 break;
             case "examine":
                 examine(command, gameState);
                 break;
-            case "interact":
-                interact(command, gameState);
+            case "rest":
+                rest(command, gameState);
                 break;
             case "use":
                 use(command, gameState);
+                break;
+            case "craft":
+                craft(command, gameState);
                 break;
             case "give":
                 give(command, gameState);
                 break;
             case "back":
-                back(command,gameState);
+                back(command, gameState);
                 break;
             default:
                 System.out.println("I don't understand this command.");
@@ -83,6 +89,7 @@ public class CommandHandler
         System.out.println("Your command words are:");
         parser.showCommands();
     }
+    
 
     /** 
      * Try to in to one direction. If there is an exit, enter the new
@@ -95,22 +102,56 @@ public class CommandHandler
             System.out.println("Go where?");
             return;
         }
-
+        
         String direction = command.getSecondWord();
+        Room previousRoom = gameState.getPreviousRoom();
         Room currentRoom = gameState.getCurrentRoom();
+        
         Room nextRoom = currentRoom.getExit(direction);
         
         if (nextRoom == null) {
             System.out.println("There is no door!");
-        } else {
-            gameState.addRoomToStack(currentRoom);
-            gameState.setCurrentRoom(nextRoom);
-            
-            if (gameState.handleEntityEncounters(currentRoom)) {
-                System.out.println(currentRoom.getLongDescription());
-            } else {
-                System.out.println(nextRoom.getLongDescription());
+            return;
+        }
+        
+        
+        Entity entity = currentRoom.getEntity("lake");
+        
+        if (entity instanceof Unlockable) {
+            if (!gameState.canTraverseLake(currentRoom, previousRoom, nextRoom, entity)) {
+                System.out.println("You must first traverse the lake using a rope!");
+                return;
             }
+        } 
+        
+        gameState.adjustHeat(-(nextRoom.getHeat()));
+        gameState.addRoomToStack(currentRoom);
+        
+        gameState.setCurrentRoom(nextRoom);
+        
+        if (gameState.handleEntityEncounters(currentRoom)) {
+            System.out.println(currentRoom.getLongDescription());
+        } else {
+            System.out.println(nextRoom.getLongDescription());
+        }
+        System.out.println(gameState.displayHeat());
+                    
+    }
+
+    
+    /** 
+     * "Quit" was entered. Check the rest of the command to see
+     * whether we really quit the game.
+     * @return true, if this command quits the game, false otherwise.
+     */
+    private boolean quit(Command command) 
+    {
+        if (command.hasSecondWord()) {
+            System.out.println("Quit what?");
+            return false;
+        }
+        else {
+            return true;  // signal that we want to quit
         }
     }
     
@@ -131,26 +172,26 @@ public class CommandHandler
         if (item == null) {
             System.out.println("This is not an item!");
         } else {
-            if (gameState.canPickUp(item)) {
-                currentRoom.removeItem(itemName);
-                inventory.addItem(item);
-                System.out.println("You picked up " + item.getName());
+            if (item.canPickUp()) {
+                if (gameState.belowWeightLimit(item)) {
+                    currentRoom.removeItem(itemName);
+                    inventory.addItem(item);
+                    System.out.println("You picked up " + item.getName());
+                } else {
+                    System.out.println("You can't carry any more items. Max weight reached.");
+                }                
             } else {
-                System.out.println("You can't carry any more items. Max weight reached.");
+                System.out.println("You cannot pick this up.");
             }
-
         }
     }
     
-    private void dropItem(Command command, GameState gameState)
+    private void dropItem(Command command, Room currentRoom, Inventory inventory)
     {
         if (!command.hasSecondWord()) {
             System.out.println("Drop which item?");
             return;
         }
-        
-        Room currentRoom = gameState.getCurrentRoom();
-        Inventory inventory = gameState.getInventory();
         
         String itemName = command.getSecondWord();
         
@@ -175,14 +216,13 @@ public class CommandHandler
     }
     
     private void examine(Command command, GameState gameState)
-    {
-        Room currentRoom = gameState.getCurrentRoom();
-        
+    {        
         if (!command.hasSecondWord()) {
             System.out.println("Examine what?");
             return;
         }
         
+        Room currentRoom = gameState.getCurrentRoom();
         String objectName = command.getSecondWord();
         
         if (currentRoom.hasItem(objectName)) {
@@ -201,26 +241,26 @@ public class CommandHandler
         
     }
     
-        private void interact(Command command, GameState gameState)
+    private void rest(Command command, GameState gameState)
     {
-        /*
         Room currentRoom = gameState.getCurrentRoom();
         
         if (!command.hasSecondWord()) {
-            System.out.println("Interact with what?");
+            System.out.println("Rest on what?");
             return;
         }
         
-        String objectName = command.getSecondWord();
+        String entityName = command.getSecondWord();
         
-        if (currentRoom.hasEntity(objectName)) {
-            Entity entity = currentRoom.getEntity(objectName);
-            entity.interact(gameState);
+        if (currentRoom.hasEntity(entityName)) {
+            Entity entity = currentRoom.getEntity(entityName);
+            Unlockable unlockable = (Unlockable) entity;
+            unlockable.rest(gameState);
+            System.out.println(gameState.displayHeat());
             return;
         }
         
         System.out.println("There is no such thing to interact with here.");
-        */
         
     }
     
@@ -254,10 +294,36 @@ public class CommandHandler
         if (entity instanceof Unlockable) {
             Unlockable unlockable = (Unlockable) entity;
             unlockable.interact(gameState, item);
-            
         } else if (entity instanceof Deer) {
-            Deer deer = (Deer) entity;
-            deer.interact(gameState, item);
+            gameState.handleEntityKill(entity, currentRoom, item);
+        }
+    }
+    
+    public void craft(Command command, GameState gameState)
+    {
+        if (!command.hasSecondWord()) {
+            System.out.println("Craft what?");
+            return;
+        }
+        
+        Room currentRoom = gameState.getCurrentRoom();
+        
+        String itemName = command.getSecondWord();
+    
+        if (currentRoom.hasEntity("crafting-table")) {
+            Entity entity = currentRoom.getEntity("crafting-table");
+            CraftingTable craftingTable = (CraftingTable) entity;
+            craftingTable.craftItem(gameState, itemName);
+            
+            if (itemName.equals("armour")) {
+                System.out.println("You have equipped the leather armour! [+50 Max Heat]");
+                gameState.setMaxHeat(150);
+                System.out.println(gameState.displayHeat());
+            }
+            
+        } else {
+            System.out.println("There is no crafting table in this room!");
+            return;
         }
     }
     
@@ -303,22 +369,6 @@ public class CommandHandler
             System.out.println(gameState.getCurrentRoom().getLongDescription());   
         }
     }
-    
 
-    /** 
-     * "Quit" was entered. Check the rest of the command to see
-     * whether we really quit the game.
-     * @return true, if this command quits the game, false otherwise.
-     */
-    private boolean quit(Command command) 
-    {
-        if (command.hasSecondWord()) {
-            System.out.println("Quit what?");
-            return false;
-        }
-        else {
-            return true;  // signal that we want to quit
-        }
-    }
     
 }

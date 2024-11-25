@@ -12,13 +12,17 @@ public class Unlockable extends Entity
     private Item requiredItem;
     private String lockedMessage;
     private String unlockedMessage;
+    private String useItemMessage;
+    private boolean consumeItem;
     
-    public Unlockable(String name, Item requiredItem, String lockedMessage, String unlockedMessage) {
+    public Unlockable(String name, Item requiredItem, String lockedMessage, String unlockedMessage, String useItemMessage, boolean consumeItem) {
         super(name);
-        this.isUnlocked = false;
+        this.isUnlocked = (requiredItem == null);
         this.requiredItem = requiredItem;
         this.lockedMessage = lockedMessage;
         this.unlockedMessage = unlockedMessage;
+        this.useItemMessage = useItemMessage;
+        this.consumeItem = consumeItem;
     }
     
     @Override
@@ -30,16 +34,23 @@ public class Unlockable extends Entity
         }
     }
 
-    @Override
     public void interact(GameState gameState, Item item) {
         if (isUnlocked) {
             System.out.println(unlockedMessage);
-        } else if (item.equals(requiredItem)) {
+        } else if (item != null && item.equals(requiredItem)) {
             isUnlocked = true;
-            System.out.println(unlockedMessage);
+            System.out.println(useItemMessage);
+            if (consumeItem && requiredItem != null) {
+                gameState.getInventory().removeItem(item);
+            }
         } else {
             System.out.println("That item doesn't work here.");
         }
+    }
+    
+    public void rest(GameState gameState)
+    {
+        return;
     }
     
     public Item getRequiredItem()
@@ -65,5 +76,10 @@ public class Unlockable extends Entity
     public void unlock()
     {
         isUnlocked = true;
+    }
+    
+    public void lock()
+    {
+        isUnlocked = false;
     }
 }

@@ -29,7 +29,6 @@ public class Person extends Entity
         }
     }
 
-    @Override
     public void interact(GameState gameState, Item item) {
         if (hasRequiredItem) {
             System.out.println(getName() + " has already given you something.");

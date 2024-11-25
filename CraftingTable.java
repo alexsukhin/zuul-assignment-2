@@ -10,35 +10,57 @@ import java.util.HashMap;
 public class CraftingTable extends Entity
 {
     HashMap<String, CraftingRecipe> recipes;
+    Item tools;
     
-    public CraftingTable(String name) {
+    public CraftingTable(String name, Item tools) {
         super(name);
         this.recipes = new HashMap<>();
+        this.tools = tools;
     }
     
     
     @Override
     public void examine(GameState gameState) {
         System.out.println("It's a sturdy wooden table with crafting tools.");
-    }
-
-    @Override
-    public void interact(GameState gameState, Item item) {
-        if (item == null) {
-            System.out.println("You need materials to craft something.");
-        } else {
-            craftItem(gameState, item);
+        System.out.println("Recipes:");
+        for (CraftingRecipe recipe : recipes.values()) {
+            System.out.println(recipe.getRecipe());
         }
     }
     
-    public void addRecipe(String recipeName, List<Item> ingredients, Item result)
+    public void addRecipe(String recipeName, Item ingredient, Item result)
     {
-        CraftingRecipe recipe = new CraftingRecipe(ingredients, result);
+        CraftingRecipe recipe = new CraftingRecipe(ingredient, result);
         recipes.put(recipeName, recipe);
     }
 
-    private void craftItem(GameState gameState, Item item) {
-        System.out.println("You craft a " + item.getName() + "!");
-        gameState.getInventory().addItem(item);
+    public void craftItem(GameState gameState, String itemName) {
+        
+        Inventory inventory = gameState.getInventory();
+        
+        if (inventory.hasItem(tools)) {
+            
+            CraftingRecipe recipe = recipes.get(itemName.toLowerCase());
+        
+            if (!(recipe == null)) {
+                
+                Item ingredient = recipe.getIngredient();
+                Item item = recipe.getResult();
+                
+                if (inventory.hasItem(ingredient)) {
+                        System.out.println("You craft the " + itemName + "!");
+                        inventory.addItem(item);
+                    
+                } else {
+                    System.out.println("You do not have the ingredients necessary to craft this item!");
+                }
+            
+            } else {
+                System.out.println("This is not valid item to craft...");
+            }
+        
+        } else {
+            System.out.println("You have no tools in your inventory!");
+        }
     }
 }

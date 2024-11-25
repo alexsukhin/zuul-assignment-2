@@ -10,15 +10,17 @@ public class Item
     private String name;
     private String description;
     private int weight;
+    private boolean pickupable;
 
     /**
      * Constructor for objects of class Item
      */
-    public Item(String name, String description, int weight)
+    public Item(String name, String description, int weight, boolean pickupable)
     {
         this.name = name;
         this.description = description;
         this.weight = weight;
+        this.pickupable = pickupable;
     }
     
     public String getName()
@@ -39,6 +41,11 @@ public class Item
     public String getItemDetails()
     {
         return name + ": " + description + " (weight: " + weight + "kg)";
+    }
+    
+    public boolean canPickUp()
+    {
+        return pickupable;
     }
 
 }

@@ -19,6 +19,7 @@ public class Room
 {
     private String name;
     private String description;
+    private int heat;
     private HashMap<String, Room> exits;        // stores exits of this room.
     private HashMap<String, Item> items;
     private HashMap<String, Entity> entities;
@@ -29,10 +30,11 @@ public class Room
      * "an open court yard".
      * @param description The room's description.
      */
-    public Room(String name, String description) 
+    public Room(String name, String description, int heat) 
     {
         this.name = name;
         this.description = description;
+        this.heat = heat;
         exits = new HashMap<>();
         items = new HashMap<>();
         entities = new HashMap<>();
@@ -46,6 +48,11 @@ public class Room
     public void setExit(String direction, Room neighbor) 
     {
         exits.put(direction, neighbor);
+    }
+    
+    public int getHeat()
+    {
+        return heat;
     }
     
     public void addItem(Item item)
@@ -73,9 +80,9 @@ public class Room
         return items.containsKey(itemName.toLowerCase());
     }
     
-    public boolean hasEntity(String itemName)
+    public boolean hasEntity(String entityName)
     {
-        return entities.containsKey(itemName.toLowerCase());
+        return entities.containsKey(entityName.toLowerCase());
     }
     
     

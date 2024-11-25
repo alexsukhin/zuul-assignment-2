@@ -7,23 +7,28 @@ import java.util.List;
  */
 public class CraftingRecipe
 {
-    private List<Item> ingredients;
+    private Item ingredient;
     private Item result;
     
-    public CraftingRecipe(List<Item> ingredients, Item result)
+    public CraftingRecipe(Item ingredient, Item result)
     {
-        this.ingredients = ingredients;
+        this.ingredient = ingredient;
         this.result = result;
     }
     
-    public List<Item> getIngredients()
+    public Item getIngredient()
     {
-        return ingredients;
+        return ingredient;
     }
     
     public Item getResult()
     {
         return result;
+    }
+    
+    public String getRecipe()
+    {
+        return "[" + result.getName() + "] - Requires " + ingredient.getName();
     }
     
 }

@@ -17,6 +17,4 @@ public abstract class Entity {
     }
 
     public abstract void examine(GameState gameState);
-
-    public abstract void interact(GameState gameState, Item item);
 }

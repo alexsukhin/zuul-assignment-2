@@ -28,13 +28,13 @@ public class Deer extends MovingEntity
         return;
     }
 
-    @Override
-    public void interact(GameState gameState, Item item)
+    public boolean killDeer(GameState gameState, Item item)
     {
         if (item.equals(knife)) {
-            //kill deer and gain leather
+            System.out.println("You kill the deer! You gain a piece of leather for your troubles.");
+            return true;
         } else {
-            System.out.println("That item doesn't work here.");
+            return false;
         }
     }
 }

@@ -28,32 +28,67 @@ public class Game
      */
     public Game() 
     {
+        initializeGame();
+    }
+    
+    private void initializeGame()
+    {
         WorldBuilder builder = new WorldBuilder();
         HashMap<String, Room> rooms = builder.createRooms();
-        builder.placeItems(rooms);
-        builder.placeEntities(rooms);
+        HashMap<String, Item> items = builder.createItems(rooms);
+        builder.placeEntities(rooms, items);
         
-        gameState = new GameState(rooms.get("wreck"));        
+        gameState = new GameState(rooms.get("wreck"), rooms.get("rescue"), items);        
         parser = new Parser();
         commandHandler = new CommandHandler();
+        
     }
 
     /**
      *  Main play routine.  Loops until end of play.
      */
     public void play() 
-    {            
-        printWelcome();
-
-        // Enter the main command loop.  Here we repeatedly read commands and
-        // execute them until the game is over.
-                
+    {
         boolean finished = false;
-        while (! finished) {
-            Command command = parser.getCommand();
-            finished = commandHandler.processCommand(command, gameState, parser);
+        
+        while (!finished) {
+            printWelcome();
+            
+            while (true) {
+                Command command = parser.getCommand();
+                boolean exitGame = commandHandler.processCommand(command, gameState, parser);
+                
+                if (gameState.getCurrentHeat() <= 0) {
+                    System.out.println("You have frozen to death!");
+                    System.out.println("Restarting the game...");
+                    delay(1000);
+                    initializeGame();
+                    break;
+                }
+                
+                if (exitGame) {
+                    finished = true;
+                    break;
+                }
+                
+                if (gameState.checkFinalRoom()) {
+                    
+                    if (gameState.checkFinalItem()) {
+                        System.out.println("You transmit the signal using the repaired radio.");
+                        System.out.println("Moments later, the faint hum of a helicopter grows louder, and a spotlight cuts through the storm.");
+                        System.out.println("Relief washes over you as you're pulled aboard, leaving the frozen wilderness behind.");
+                    } else {
+                        System.out.println("You reach the rescue pad, but without a working radio, your signal cannot be sent.");
+                        System.out.println("The storm rages on, and rescue feels impossibly far away.");
+                    }
+                    
+                    finished = true;
+                    break;
+                } 
+            }
         }
-        System.out.println("Thank you for playing.  Good bye.");
+        
+        System.out.println("\nThank you for playing!");
     }
 
     /**
@@ -68,6 +103,17 @@ public class Game
         System.out.println();
         System.out.println(gameState.getCurrentRoom().getLongDescription());
         System.out.println(gameState.getCurrentRoom().getEntitiesString());
+        System.out.println(gameState.displayHeat());
+    }
+    
+    
+    public static void delay(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.out.println("Something interrupted the delay!");
+        }
     }
 
 }
