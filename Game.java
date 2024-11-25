@@ -36,9 +36,8 @@ public class Game
         WorldBuilder builder = new WorldBuilder();
         HashMap<String, Room> rooms = builder.createRooms();
         HashMap<String, Item> items = builder.createItems(rooms);
-        builder.placeEntities(rooms, items);
-        
-        gameState = new GameState(rooms.get("wreck"), rooms.get("rescue"), items);        
+        HashMap<String, Entity> entities = builder.createEntities(rooms, items);
+        gameState = new GameState(rooms, items, entities.get("deer"));        
         parser = new Parser();
         commandHandler = new CommandHandler();
         
@@ -77,13 +76,17 @@ public class Game
                         System.out.println("You transmit the signal using the repaired radio.");
                         System.out.println("Moments later, the faint hum of a helicopter grows louder, and a spotlight cuts through the storm.");
                         System.out.println("Relief washes over you as you're pulled aboard, leaving the frozen wilderness behind.");
+                        finished = true;
+                        break;
                     } else {
                         System.out.println("You reach the rescue pad, but without a working radio, your signal cannot be sent.");
                         System.out.println("The storm rages on, and rescue feels impossibly far away.");
+                        System.out.println("Restarting the game...");
+                        delay(1000);
+                        initializeGame();
+                        break;
+                        
                     }
-                    
-                    finished = true;
-                    break;
                 } 
             }
         }

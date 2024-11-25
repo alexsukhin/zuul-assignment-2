@@ -1,3 +1,4 @@
+import java.util.HashMap;
 
 /**
  * Write a description of class CommandHandler here.
@@ -106,7 +107,6 @@ public class CommandHandler
         String direction = command.getSecondWord();
         Room previousRoom = gameState.getPreviousRoom();
         Room currentRoom = gameState.getCurrentRoom();
-        
         Room nextRoom = currentRoom.getExit(direction);
         
         if (nextRoom == null) {
@@ -114,6 +114,10 @@ public class CommandHandler
             return;
         }
         
+        if (nextRoom.isTeleporter()) {
+            gameState.teleportRandomRoom(nextRoom);
+            return;
+        }
         
         Entity entity = currentRoom.getEntity("lake");
         
@@ -122,7 +126,7 @@ public class CommandHandler
                 System.out.println("You must first traverse the lake using a rope!");
                 return;
             }
-        } 
+        }
         
         gameState.adjustHeat(-(nextRoom.getHeat()));
         gameState.addRoomToStack(currentRoom);
@@ -134,6 +138,7 @@ public class CommandHandler
         } else {
             System.out.println(nextRoom.getLongDescription());
         }
+        
         System.out.println(gameState.displayHeat());
                     
     }
@@ -313,13 +318,17 @@ public class CommandHandler
         if (currentRoom.hasEntity("crafting-table")) {
             Entity entity = currentRoom.getEntity("crafting-table");
             CraftingTable craftingTable = (CraftingTable) entity;
-            craftingTable.craftItem(gameState, itemName);
             
-            if (itemName.equals("armour")) {
-                System.out.println("You have equipped the leather armour! [+50 Max Heat]");
-                gameState.setMaxHeat(150);
-                System.out.println(gameState.displayHeat());
+            if (craftingTable.craftItem(gameState, itemName)) {
+                if (itemName.equals("armour")) {
+                    System.out.println("You have equipped the leather armour! [+50 Max Heat]");
+                    gameState.setMaxHeat(150);
+                    System.out.println(gameState.displayHeat());
+                }
+            } else {
+                System.out.println("You have no tools in your inventory!");
             }
+            
             
         } else {
             System.out.println("There is no crafting table in this room!");

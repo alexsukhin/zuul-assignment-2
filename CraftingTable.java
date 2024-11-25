@@ -34,7 +34,7 @@ public class CraftingTable extends Entity
         recipes.put(recipeName, recipe);
     }
 
-    public void craftItem(GameState gameState, String itemName) {
+    public boolean craftItem(GameState gameState, String itemName) {
         
         Inventory inventory = gameState.getInventory();
         
@@ -60,7 +60,9 @@ public class CraftingTable extends Entity
             }
         
         } else {
-            System.out.println("You have no tools in your inventory!");
+            return false;
         }
+        
+        return true;
     }
 }

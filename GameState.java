@@ -1,5 +1,8 @@
 import java.util.Stack;
 import java.util.HashMap;
+import java.util.Random;
+import java.util.List;
+import java.util.Arrays;
 
 /**
  * Write a description of class GameState here.
@@ -11,6 +14,8 @@ public class GameState
 {
     private Room currentRoom;
     private Room endingRoom;
+    private Entity deer;
+    private HashMap<String, Room> rooms;
     private Stack<Room> previousRooms;
     
     private Inventory inventory;
@@ -20,12 +25,15 @@ public class GameState
     private int maxHeat = 100;
     private final int maxWeight = 50;
     
-    public GameState(Room startingRoom, Room endingRoom, HashMap<String, Item> items) {
-        this.currentRoom = startingRoom;
-        this.endingRoom = endingRoom;
-        previousRooms = new Stack<>();
-        inventory = new Inventory();
+    public GameState(HashMap<String, Room> rooms, HashMap<String, Item> items, Entity entity) {
+        this.currentRoom = rooms.get("wreck");
+        this.endingRoom = rooms.get("rescue");
+        this.deer = entity;
+        this.rooms = rooms;
+        this.previousRooms = new Stack<>();
+        this.inventory = new Inventory();
         this.items = items;
+    
     }
     
     public Room getCurrentRoom()
@@ -50,6 +58,11 @@ public class GameState
     public HashMap<String, Item> getItems()
     {
         return items;
+    }
+    
+    public HashMap<String, Room> getRooms()
+    {
+        return rooms;
     }
     
     public int getCurrentHeat()
@@ -110,9 +123,9 @@ public class GameState
     
     public boolean handleEntityEncounters(Room previousRoom) {
         Room currentRoom = getCurrentRoom();
-
-        if (previousRoom.hasEntity("deer")) {
-            Deer deer = (Deer) previousRoom.getEntity("deer");
+        Deer deer = (Deer) this.deer;
+        
+        if (deer.isAlive()) {
             deer.move(this);
         }
 
@@ -176,6 +189,47 @@ public class GameState
             return true;
         } else {
             return false;
+        }
+    }
+    
+    public void teleportRandomRoom(Room nextRoom)
+    {
+            List<Room> teleporterRooms = Arrays.asList(
+                rooms.get("camp"),
+                rooms.get("cave"),
+                rooms.get("station"), 
+                rooms.get("plane"),
+                rooms.get("cabin"),
+                rooms.get("forest")
+            );
+            
+            Random random = new Random();
+            int randomIndex = random.nextInt(teleporterRooms.size());
+            Room randomRoom = teleporterRooms.get(randomIndex);
+            
+            System.out.println("You step into Storm’s Fury, where the howling winds and blinding snow overwhelm your senses.");
+            System.out.println("Disoriented and lost, you wander aimlessly, only to find yourself back in a familiar place, unsure how you returned.");
+            
+            System.out.println(randomRoom.getLongDescription());
+            System.out.println(displayHeat());
+            
+            currentRoom = randomRoom;
+            reconfigureStack(randomRoom);
+            nextRoom.unsetTeleporter();
+            Game.delay(1500);
+    }
+    
+    public void reconfigureStack(Room room)
+    {
+        boolean reconfigured = false;
+        
+        while (!reconfigured) {
+            Room previousRoom = previousRooms.pop();
+            
+            if (previousRoom == room) {
+                reconfigured = true;
+            }
+            
         }
     }
 

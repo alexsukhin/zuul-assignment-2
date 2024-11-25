@@ -20,6 +20,7 @@ public class Room
     private String name;
     private String description;
     private int heat;
+    private boolean teleporter;
     private HashMap<String, Room> exits;        // stores exits of this room.
     private HashMap<String, Item> items;
     private HashMap<String, Entity> entities;
@@ -34,6 +35,18 @@ public class Room
     {
         this.name = name;
         this.description = description;
+        this.teleporter = false;
+        this.heat = heat;
+        exits = new HashMap<>();
+        items = new HashMap<>();
+        entities = new HashMap<>();
+    }
+    
+    public Room(String name, String description, boolean teleporter, int heat) 
+    {
+        this.name = name;
+        this.description = description;
+        this.teleporter = teleporter;
         this.heat = heat;
         exits = new HashMap<>();
         items = new HashMap<>();
@@ -53,6 +66,16 @@ public class Room
     public int getHeat()
     {
         return heat;
+    }
+    
+    public boolean isTeleporter()
+    {
+        return teleporter;
+    }
+    
+    public void unsetTeleporter()
+    {
+        teleporter = false;
     }
     
     public void addItem(Item item)
