@@ -23,6 +23,8 @@ public class Item
         this.pickupable = pickupable;
     }
     
+    
+
     public String getName()
     {
         return name.toLowerCase();

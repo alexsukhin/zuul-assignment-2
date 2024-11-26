@@ -16,5 +16,6 @@ public abstract class Entity {
         return name;
     }
 
-    public abstract void examine(GameState gameState);
+    public abstract void examine();
+    
 }

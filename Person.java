@@ -20,8 +20,9 @@ public class Person extends Entity
         this.hasRequiredItem = false;
     }
     
+    
     @Override
-    public void examine(GameState gameState) {
+    public void examine() {
         if (hasRequiredItem) {
             System.out.println(getName() + " has nothing more to give.");
         } else {

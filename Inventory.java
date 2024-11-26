@@ -18,33 +18,6 @@ public class Inventory
         items = new ArrayList<>();
     }
     
-    public void addItem(Item item)
-    {
-        items.add(item);
-    }
-    
-    public boolean removeItem(Item item)
-    {
-        return items.remove(item);
-    }
-    
-    public boolean hasItem(Item item)
-    {
-        return items.contains(item);
-    }
-    
-    public void showInventory()
-    {
-        if (items.isEmpty()) {
-            System.out.println("Your inventory is empty");
-        } else {
-            System.out.println("Your inventory contains:");
-            for (Item item : items) {
-                System.out.println(item.getItemDetails());
-            }
-        }
-    }
-    
     public int getTotalWeight()
     {
         int totalWeight = 0;
@@ -63,5 +36,32 @@ public class Inventory
             }
         }
         return null;
+    }
+    
+    public boolean hasItem(Item item)
+    {
+        return items.contains(item);
+    }
+    
+    public void addItem(Item item)
+    {
+        items.add(item);
+    }
+    
+    public boolean removeItem(Item item)
+    {
+        return items.remove(item);
+    }
+    
+    public void showInventory()
+    {
+        if (items.isEmpty()) {
+            System.out.println("Your inventory is empty");
+        } else {
+            System.out.println("Your inventory contains:");
+            for (Item item : items) {
+                System.out.println(item.getItemDetails());
+            }
+        }
     }
 }

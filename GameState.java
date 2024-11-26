@@ -77,7 +77,7 @@ public class GameState
     
     public void adjustHeat(int heat)
     {
-        currentHeat += heat;
+        this.currentHeat += heat;
         if (currentHeat >= maxHeat) {
             currentHeat = maxHeat;
         } else if (currentHeat < 0) {
@@ -105,7 +105,7 @@ public class GameState
         return "Heat: "+ getCurrentHeat() + "/" + getMaxHeat();
     }
     
-    public boolean Back()
+    public boolean back()
     {
         if (previousRooms.isEmpty()) {
             return false;
@@ -120,10 +120,10 @@ public class GameState
     {
         return inventory.getTotalWeight() + item.getWeight() <= maxWeight;
     }
-    
+        
     public boolean handleEntityEncounters(Room previousRoom) {
         Room currentRoom = getCurrentRoom();
-        Deer deer = (Deer) this.deer;
+        Deer deer = (Deer) this.deer;  
         
         if (deer.isAlive()) {
             deer.move(this);
@@ -133,7 +133,7 @@ public class GameState
             SnowWolf snowWolf = (SnowWolf) currentRoom.getEntity("snow-wolf");
     
             if (!snowWolf.encounter(this)) {
-                Back();
+                back();
                 return true;
             } else {    
                 currentRoom.removeEntity("snow-wolf");
@@ -173,23 +173,12 @@ public class GameState
     
     public boolean checkFinalRoom()
     {
-        if (currentRoom == endingRoom) {
-            return true;
-        } else {
-            return false;
-        }
-    
+        return currentRoom == endingRoom;
     }
     
     public boolean checkFinalItem()
     {
-        Item repairedRadio = inventory.getItem("repaired-radio");
-        
-        if (inventory.hasItem(repairedRadio)) {
-            return true;
-        } else {
-            return false;
-        }
+        return inventory.hasItem(items.get("repaired-radio"));
     }
     
     public void teleportRandomRoom(Room nextRoom)
@@ -203,13 +192,9 @@ public class GameState
                 rooms.get("forest")
             );
             
-            Random random = new Random();
-            int randomIndex = random.nextInt(teleporterRooms.size());
-            Room randomRoom = teleporterRooms.get(randomIndex);
-            
+            Room randomRoom = teleporterRooms.get(new Random().nextInt(teleporterRooms.size()));
             System.out.println("You step into Storm’s Fury, where the howling winds and blinding snow overwhelm your senses.");
             System.out.println("Disoriented and lost, you wander aimlessly, only to find yourself back in a familiar place, unsure how you returned.");
-            
             System.out.println(randomRoom.getLongDescription());
             System.out.println(displayHeat());
             
@@ -220,21 +205,9 @@ public class GameState
     }
     
     public void reconfigureStack(Room room)
-    {
-        boolean reconfigured = false;
-        
-        while (!reconfigured) {
-            Room previousRoom = previousRooms.pop();
-            
-            if (previousRoom == room) {
-                reconfigured = true;
-            }
-            
+    {   
+        while (!previousRooms.isEmpty() && previousRooms.peek() != room) {
+            previousRooms.pop();
         }
     }
-
 }
-
-
-
-

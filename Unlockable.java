@@ -17,40 +17,57 @@ public class Unlockable extends Entity
     
     public Unlockable(String name, Item requiredItem, String lockedMessage, String unlockedMessage, String useItemMessage, boolean consumeItem) {
         super(name);
-        this.isUnlocked = (requiredItem == null);
         this.requiredItem = requiredItem;
         this.lockedMessage = lockedMessage;
         this.unlockedMessage = unlockedMessage;
         this.useItemMessage = useItemMessage;
         this.consumeItem = consumeItem;
+        
+        this.isUnlocked = (requiredItem == null);
     }
     
-    @Override
-    public void examine(GameState gameState) {
-        if (isUnlocked) {
-            System.out.println(unlockedMessage);
-        } else {
-            System.out.println(lockedMessage);
+    public void tryUnlock(Inventory inventory, Item item)
+    {
+        if (isUnlocked()) {
+            System.out.println(getUnlockedMessage());
+            return;
         }
-    }
-
-    public void interact(GameState gameState, Item item) {
-        if (isUnlocked) {
-            System.out.println(unlockedMessage);
-        } else if (item != null && item.equals(requiredItem)) {
-            isUnlocked = true;
-            System.out.println(useItemMessage);
-            if (consumeItem && requiredItem != null) {
-                gameState.getInventory().removeItem(item);
+        
+        if (item != null && item.equals(getRequiredItem())) {
+            unlock();
+            System.out.println(getUseItemMessage());
+            
+            if (shouldConsumeItem()) {
+                inventory.removeItem(item);                
             }
         } else {
             System.out.println("That item doesn't work here.");
         }
     }
     
-    public void rest(GameState gameState)
+    @Override
+    public void examine()
     {
-        return;
+        if (isUnlocked) {
+            System.out.println(unlockedMessage);
+        } else {
+            System.out.println(lockedMessage);
+        }
+    }
+    
+    public boolean isUnlocked()
+    {
+        return isUnlocked;
+    }
+    
+    public void unlock()
+    {
+        isUnlocked = true;
+    }
+    
+    public void lock()
+    {
+        isUnlocked = false;
     }
     
     public Item getRequiredItem()
@@ -68,18 +85,13 @@ public class Unlockable extends Entity
         return lockedMessage;
     }
     
-    public boolean isUnlocked()
+    public String getUseItemMessage()
     {
-        return isUnlocked;
+        return useItemMessage;
     }
     
-    public void unlock()
+    public boolean shouldConsumeItem()
     {
-        isUnlocked = true;
-    }
-    
-    public void lock()
-    {
-        isUnlocked = false;
+        return consumeItem;
     }
 }

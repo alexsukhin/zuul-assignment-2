@@ -106,13 +106,26 @@ public class WorldBuilder
             ));
             
         entities.put("fireplace",
-            new Fireplace(
+            new RestingPlace(
                 "fireplace",
-                items.get("firewood")
+                items.get("firewood"),
+                "The fireplace is cold and needs firewood to start a fire.",
+                "The fire is burning brightly, keeping you warm.",
+                "You put firewood in the fireplace and light it. Warmth spreads around!",
+                false
             )
         );
         
-        entities.put("cave-rest", new Cave("cave-rest"));
+        entities.put("cave-rest",
+            new RestingPlace(
+                "cave-rest",
+                null,
+                "The cave provides shelter from the cold.",
+                "The cave is quiet and provides a safe place to rest.",
+                null,
+                true
+            )
+        );
         
         entities.put("old-man",
             new Person(

@@ -20,7 +20,7 @@ public class CraftingTable extends Entity
     
     
     @Override
-    public void examine(GameState gameState) {
+    public void examine() {
         System.out.println("It's a sturdy wooden table with crafting tools.");
         System.out.println("Recipes:");
         for (CraftingRecipe recipe : recipes.values()) {
@@ -33,6 +33,7 @@ public class CraftingTable extends Entity
         CraftingRecipe recipe = new CraftingRecipe(ingredient, result);
         recipes.put(recipeName, recipe);
     }
+    
 
     public boolean craftItem(GameState gameState, String itemName) {
         

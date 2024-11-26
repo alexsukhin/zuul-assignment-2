@@ -40,6 +40,7 @@ public class SnowWolf extends MovingEntity
         
     }
     
+    
     @Override
     public boolean canMoveTo(Room targetRoom, Room playerRoom)
     {
@@ -47,7 +48,7 @@ public class SnowWolf extends MovingEntity
     }
     
     @Override
-    public void examine(GameState gameState)
+    public void examine()
     {
         return;
     }

@@ -25,10 +25,12 @@ public class Deer extends MovingEntity
     }
     
     @Override
-    public void examine(GameState gameState)
+    public void examine()
     {
         return;
     }
+    
+    
 
     public boolean killDeer(GameState gameState, Item item)
     {
@@ -43,10 +45,6 @@ public class Deer extends MovingEntity
     
     public boolean isAlive()
     {
-        if (alive) {
-            return true;
-        } else {
-            return false;
-        } 
+        return alive; 
     }
 }

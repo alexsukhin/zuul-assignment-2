@@ -53,6 +53,6 @@ public abstract class MovingEntity extends Entity
     public abstract boolean canMoveTo(Room targetRoom, Room playerRoom);
     
     @Override
-    public abstract void examine(GameState gameState);
+    public abstract void examine();
     
 }

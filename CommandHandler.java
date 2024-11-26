@@ -238,7 +238,7 @@ public class CommandHandler
         
         if (currentRoom.hasEntity(objectName)) {
             Entity entity = currentRoom.getEntity(objectName);
-            entity.examine(gameState);
+            entity.examine();
             return;
         }
         
@@ -247,25 +247,26 @@ public class CommandHandler
     }
     
     private void rest(Command command, GameState gameState)
-    {
-        Room currentRoom = gameState.getCurrentRoom();
-        
+    {        
         if (!command.hasSecondWord()) {
             System.out.println("Rest on what?");
             return;
         }
         
         String entityName = command.getSecondWord();
+        Room currentRoom = gameState.getCurrentRoom();
         
         if (currentRoom.hasEntity(entityName)) {
             Entity entity = currentRoom.getEntity(entityName);
-            Unlockable unlockable = (Unlockable) entity;
-            unlockable.rest(gameState);
-            System.out.println(gameState.displayHeat());
-            return;
+            if (entity instanceof RestingPlace) {
+                RestingPlace restingPlace = (RestingPlace) entity;
+                restingPlace.rest(gameState);
+                return;
+            } else {
+                System.out.println("You cannot rest here.");}
         }
         
-        System.out.println("There is no such thing to interact with here.");
+        System.out.println("There is no such thing to rest on  here.");
         
     }
     
@@ -298,7 +299,7 @@ public class CommandHandler
         
         if (entity instanceof Unlockable) {
             Unlockable unlockable = (Unlockable) entity;
-            unlockable.interact(gameState, item);
+            unlockable.tryUnlock(inventory, item);
         } else if (entity instanceof Deer) {
             gameState.handleEntityKill(entity, currentRoom, item);
         }
@@ -371,7 +372,7 @@ public class CommandHandler
     
     public void back(Command command, GameState gameState)
     {
-        if (!gameState.Back()) {
+        if (!gameState.back()) {
             System.out.println("There is no previous room to go back to!");
         } else {
             System.out.println("Returning to previous room!");
