@@ -51,7 +51,7 @@ public class Parser
             if (tokenizer.hasNext()) {
                 word2 = tokenizer.next();      // get second word
                 if (tokenizer.hasNext()) {
-                    word3 = tokenizer.next();
+                    word3 = tokenizer.next();   // get third word
                     // note: we just ignore the rest of the input line.
                 }
             }

@@ -92,99 +92,18 @@ public class WorldBuilder
     }
     
     public HashMap<String, Entity> createEntities(HashMap<String, Room> rooms, HashMap<String, Item> items) {
-        
         HashMap<String, Entity> entities = new HashMap<>();
         
-        entities.put("lake", 
-            new Unlockable(
-                "lake",
-                items.get("rope"),
-                "The frozen lake is too dangerous to cross without assistance. The rope is your only chance.",
-                null,
-                "You successfully crossed the frozen lake using the rope.",
-                false
-            ));
-            
-        entities.put("fireplace",
-            new RestingPlace(
-                "fireplace",
-                items.get("firewood"),
-                "The fireplace is cold and needs firewood to start a fire.",
-                "The fire is burning brightly, keeping you warm.",
-                "You put firewood in the fireplace and light it. Warmth spreads around!",
-                false
-            )
-        );
-        
-        entities.put("cave-rest",
-            new RestingPlace(
-                "cave-rest",
-                null,
-                "The cave provides shelter from the cold.",
-                "The cave is quiet and provides a safe place to rest.",
-                null,
-                true
-            )
-        );
-        
-        entities.put("old-man",
-            new Person(
-                "old-man",
-                items.get("battery"),
-                items.get("torch"),
-                "The old man looks at you and says, 'Bring me a torch first, and I might help you.'"
-            )
-        );
-        
-        entities.put("snow-wolf",
-            new SnowWolf(
-                new ArrayList<Room>() {
-                    {
-                        add(rooms.get("camp"));
-                        add(rooms.get("storm"));
-                        add(rooms.get("station"));
-                    }
-                },
-                items.get("knife")
-            )
-        );
-        
-        entities.put("deer",
-            new Deer(
-                new ArrayList<Room>() {
-                    {
-                        add(rooms.get("forest"));
-                        add(rooms.get("cabin"));
-                        add(rooms.get("wreck"));
-                        add(rooms.get("lake"));
-                    }
-                },
-                items.get("knife")
-            )
-        );
-        
-        CraftingTable craftingTable = new CraftingTable(
-            "crafting-table",
-            items.get("tools")
-        );
-        
-
-        craftingTable.addRecipe(
-            "repaired-radio",
-            items.get("battery"),
-            items.get("repaired-radio")
-        );
+        // Create entities using the factory
+        entities.put("lake", EntityFactory.createEntity("lake", rooms, items));
+        entities.put("fireplace", EntityFactory.createEntity("fireplace", rooms, items));
+        entities.put("cave-rest", EntityFactory.createEntity("cave-rest", rooms, items));
+        entities.put("old-man", EntityFactory.createEntity("old-man", rooms, items));
+        entities.put("snow-wolf", EntityFactory.createEntity("snow-wolf", rooms, items));
+        entities.put("deer", EntityFactory.createEntity("deer", rooms, items));
+        entities.put("crafting-table", EntityFactory.createEntity("crafting-table", rooms, items));
     
-        craftingTable.addRecipe(
-            "armour",
-            items.get("leather"),
-            items.get("armour")
-        );
-        
-        entities.put("crafting-table", craftingTable);
-        
-        
-        
+        // Add entities to rooms
         rooms.get("lake").addEntity(entities.get("lake"));
         rooms.get("cabin").addEntity(entities.get("fireplace"));
         rooms.get("cave").addEntity(entities.get("cave-rest"));
@@ -192,7 +111,7 @@ public class WorldBuilder
         rooms.get("camp").addEntity(entities.get("snow-wolf"));
         rooms.get("forest").addEntity(entities.get("deer"));
         rooms.get("station").addEntity(entities.get("crafting-table"));
-        
+
         return entities;
     }
 
