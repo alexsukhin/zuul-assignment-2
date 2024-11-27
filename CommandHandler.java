@@ -49,6 +49,7 @@ public class CommandHandler
                 break;
             case "inventory":
                 inventory.showInventory(); // Shows the player's inventory
+                System.out.println("Weight: " + inventory.getTotalWeight() + "/" + inventory.getMaxWeight()); // Gets max weight limit
                 break;
             case "get":
                 pickupItem(command, gameState); // Pick up an item
@@ -177,7 +178,7 @@ public class CommandHandler
     private void pickupItem(Command command, GameState gameState)
     {
         if (!command.hasSecondWord()) {
-            // Notify the plaeyr if no item is specified
+            // Notify the player if no item is specified
             System.out.println("There is no such item here!"); 
             return;
         }
@@ -233,7 +234,7 @@ public class CommandHandler
         } else {
             // Remove the item from the inventory and add it to the room
             currentRoom.addItem(item);
-            inventory.removeItem(item);
+            inventory.removeItem(itemName);
             System.out.println("You dropped " + item.getName());
         }
     }
@@ -401,7 +402,7 @@ public class CommandHandler
             if (craftingTable.craftItem(gameState.getInventory(), itemName)) {
                 // If the crafted item is armour, equip it and update max heat
                 if (itemName.equals("armour")) {
-                    System.out.println("You have equwipped the leather armour! [+50 Max Heat]");
+                    System.out.println("You have equipped the leather armour! [+50 Max Heat]");
                     gameState.setMaxHeat(150); // increases max heat capacity
                     System.out.println(gameState.displayHeat());
                 }

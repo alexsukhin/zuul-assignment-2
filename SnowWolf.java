@@ -10,7 +10,8 @@ import java.util.List;
  * @author Alexander Sukhin
  * @version 2024.11.26
  */
-public class SnowWolf extends MovingEntity {
+public class SnowWolf extends MovingEntity
+{
     
         private String knife; // knife required to defeat the Snow Wolf
 
@@ -20,7 +21,8 @@ public class SnowWolf extends MovingEntity {
      * @param rooms A list of names of rooms the Snow Wolf can move between.
      * @param knife The item required to defeat the Snow Wolf.
      */
-    public SnowWolf(List<String> rooms, String knife) {
+    public SnowWolf(List<String> rooms, String knife)
+    {
         super("snow-wolf", rooms);
         this.knife = knife;
     }
@@ -36,11 +38,12 @@ public class SnowWolf extends MovingEntity {
      * @param roomHandler The RoomHandler interface managing room interactions.
      * @return true if the Snow Wolf is defeated, false if the player is forced to flee.
      */
-    public boolean encounter(ItemHandler itemHandler, RoomHandler roomHandler) {
+    public boolean encounter(ItemHandler itemHandler, RoomHandler roomHandler)
+    {
         System.out.println("The Snow Wolf growls menacingly. It is ready to attack!");
-        Game.delay(1000); // Adds a short delay for dramatic effect
+        Game.delay(1000);
 
-        if (itemHandler.hasItem(knife)) { // Checks if the player has the required item
+        if (itemHandler.hasItem(knife)) { // checks if the player has the required item
             System.out.println("The Snow Wolf attacks, but you fight back with your knife!");
             System.out.println("You kill the Snow Wolf! It will no longer threaten you.");
             Game.delay(1000);
@@ -57,7 +60,8 @@ public class SnowWolf extends MovingEntity {
      * Provides an action when the entity is examined.
      */
     @Override
-    public void examine() {
+    public void examine()
+    {
         // No specific action for the Snow Wolf
     }
 }

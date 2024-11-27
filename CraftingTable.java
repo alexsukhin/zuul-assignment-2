@@ -14,7 +14,8 @@ import java.util.Map;
  * @author Alexander Sukhin
  * @version 2024.11.26
  */
-public class CraftingTable extends Entity {
+public class CraftingTable extends Entity
+{
     
     private HashMap<String, List<String>> recipes;  // a map of item names to their required ingredients
     private String tools;                     // name of item tools required to craft items
@@ -25,7 +26,8 @@ public class CraftingTable extends Entity {
      * @param name The name of the crafting table.
      * @param tools The name of the item tools required to craft items.
      */
-    public CraftingTable(String name, String tools) {
+    public CraftingTable(String name, String tools)
+    {
         super(name); 
         this.recipes = new HashMap<>();
         this.tools = tools;
@@ -38,7 +40,8 @@ public class CraftingTable extends Entity {
      * table and its available recipes.
      */
     @Override
-    public void examine() {
+    public void examine()
+    {
         System.out.println("It's a sturdy wooden table with crafting tools.");
         System.out.println("Recipes:");
         
@@ -54,7 +57,8 @@ public class CraftingTable extends Entity {
      * @param result The item that will be created by crafting.
      * @param ingredient A list of ingredients required to craft the item.
      */
-    public void addRecipe(String result, List<String> ingredient) {
+    public void addRecipe(String result, List<String> ingredient)
+    {
         recipes.put(result, ingredient);
     }
     
@@ -66,7 +70,8 @@ public class CraftingTable extends Entity {
      * @param itemName The name of the item the player wants to craft.
      * @return true if the item is crafted successfully, false otherwise.
      */
-    public boolean craftItem(ItemHandler itemHandler, String itemName) {
+    public boolean craftItem(ItemHandler itemHandler, String itemName)
+    {
         // Retrieves the list of ingredients for the item from the recipes hashmap
         List<String> ingredients= recipes.get(itemName.toLowerCase());
     

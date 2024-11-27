@@ -1,7 +1,7 @@
 /**
  * This class is part of the "World of Zuul" application. 
  * "World of Zuul" is a very simple, text based adventure game.  
- *
+ *  
  * This class holds information about commands that are issued by the user.
  * A command consists of three strings: a command word, a second word and
  * a third word. Commands are checked for being valid command words. If the 

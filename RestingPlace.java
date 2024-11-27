@@ -7,7 +7,8 @@
  * @author Alexander Sukhin
  * @version 2024.11.26
  */
-public class RestingPlace extends Unlockable {
+public class RestingPlace extends Unlockable
+{
     
     private int numRests;             // limits the number of uses for a fireplace
     private boolean fullyRestoresHeat;
@@ -23,8 +24,8 @@ public class RestingPlace extends Unlockable {
      * @param useItemMessage The message displayed when the required item is used on the object.
      * @param fullyRestoresHeat A boolean indicating whether this resting place fully restores heat.
      */
-    public RestingPlace(String name, String requiredItem, String lockedMessage, String unlockedMessage, 
-                        String useItemMessage, boolean fullyRestoresHeat) {
+    public RestingPlace(String name, String requiredItem, String lockedMessage, String unlockedMessage, String useItemMessage, boolean fullyRestoresHeat)
+    {
         super(name, requiredItem, lockedMessage, unlockedMessage, useItemMessage, requiredItem != null); 
         this.fullyRestoresHeat = fullyRestoresHeat; // represented as true for caves (fully restores heat)
                                                     // and false for fireplaces (partial heat restoration)
@@ -36,14 +37,16 @@ public class RestingPlace extends Unlockable {
     /**
      * @return The number of remaining uses for the resting place
      */
-    public int getNumRests() {
+    public int getNumRests()
+    {
         return numRests;
     }
     
     /**
      * @return True if the resting place fully restores heat, false otherwise
      */
-    public boolean fullyRestoresHeat() {
+    public boolean fullyRestoresHeat()
+    {
         return fullyRestoresHeat;
     }
 
@@ -56,7 +59,8 @@ public class RestingPlace extends Unlockable {
      * 
      * @param gameState The current state of the game, used to adjust the player's current heat level
      */
-    public void rest(GameState gameState) {
+    public void rest(GameState gameState)
+    {
         if (isUnlocked()) {
             if (fullyRestoresHeat()) {
                 System.out.println("You rest in the cave and feel fully rejuvenated.");
@@ -80,7 +84,8 @@ public class RestingPlace extends Unlockable {
     /**
      * Decreases the number of remaining uses for the resting place by one, if applicable.
      */
-    private void decrementRests() {
+    private void decrementRests()
+    {
         if (numRests > 0) {
             numRests--;
         }

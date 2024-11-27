@@ -7,7 +7,8 @@
  * @author Alexander Sukhin
  * @version 2024.11.26
  */
-public class Trader extends Entity {
+public class Trader extends Entity
+{
 
     private String heldItem;        // item that the trader holds and may give to the player
     private String requiredItem;    // item that the player holds and may give to the trader for the held item
@@ -22,7 +23,8 @@ public class Trader extends Entity {
      * @param requiredItem The item the player needs to provide in exchange for the held item.
      * @param noItemMessage The message displayed when the player tries to interact but doesn't have the required item.
      */
-    public Trader(String name, String heldItem, String requiredItem, String noItemMessage) {
+    public Trader(String name, String heldItem, String requiredItem, String noItemMessage)
+    {
         super(name);
         this.heldItem = heldItem;
         this.requiredItem = requiredItem;
@@ -39,7 +41,8 @@ public class Trader extends Entity {
      * give the required item to the trader.
      */
     @Override
-    public void examine() {
+    public void examine()
+    {
         if (hasRequiredItem) {
             System.out.println(getName() + " has nothing more to give.");
         } else {
@@ -55,7 +58,8 @@ public class Trader extends Entity {
      * @param itemHandler The ItemHandler interface managing the player's inventory.
      * @param itemName The name of the item the player offers to the trader.
      */
-    public void interact(ItemHandler itemHandler, String itemName) {
+    public void interact(ItemHandler itemHandler, String itemName)
+    {
         if (hasRequiredItem) {
             System.out.println(getName() + " has already given you something.");
         } else if (itemName.equals(requiredItem)) {

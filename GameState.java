@@ -13,20 +13,19 @@ import java.util.Random;
  * @author Alexander Sukhin
  * @version 2024.11.26
  */
-public class GameState implements RoomHandler {
+public class GameState implements RoomHandler
+{
 
     private Room currentRoom;            // room the player is currently in
     private Room endingRoom;             // final room in the game
-    private HashMap<String, Entity> entities;  // hashmap of all entities in the game world
     private HashMap<String, Room> rooms;       // hashmap of all rooms in the game world
     private Stack<Room> previousRooms;        // stack to keep track of previous rooms visited
+    private HashMap<String, Entity> entities;  // hashmap of all entities in the game world
     
     private Inventory inventory;           // player's inventory
-    private HashMap<String, Item> items;   // hashmap of all items available in the game
     
-    private int currentHeat = 100;         // the currentheat level of the player
-    private int maxHeat = 100;             // the maximum heat level the player can have
-    private final int maxWeight = 50;      // the maximum weight the player can carry
+    private int currentHeat;         // the currentheat level of the player
+    private int maxHeat;             // the maximum heat level the player can have
     
     /**
      * Initialises the game state with rooms, items, and entities.
@@ -35,14 +34,16 @@ public class GameState implements RoomHandler {
      * @param items A hashmap of items available in the game.
      * @param entities A hashmap of entities present in the game.
      */
-    public GameState(HashMap<String, Room> rooms, HashMap<String, Item> items, HashMap<String, Entity> entities) {
+    public GameState(HashMap<String, Room> rooms, HashMap<String, Item> items, HashMap<String, Entity> entities)
+    {
         this.currentRoom = rooms.get("wreck"); // sets the starting room
         this.endingRoom = rooms.get("rescue"); // sets the ending room
-        this.entities = entities;
         this.rooms = rooms;
         this.previousRooms = new Stack<>();
-        this.items = items;
+        this.entities = entities;
         this.inventory = new Inventory(items); // initialises the player's inventory
+        this.currentHeat = 75; // heat at 75 forces player to rest at fireplace
+        this.maxHeat = 100;
     }
 
     // Getter methods
@@ -50,7 +51,8 @@ public class GameState implements RoomHandler {
     /**
      * @return The current room.
      */
-    public Room getCurrentRoom() {
+    public Room getCurrentRoom()
+    {
         return currentRoom;
     }
 
@@ -60,7 +62,8 @@ public class GameState implements RoomHandler {
      * @param roomName The name of the room.
      * @return The room with the specified name.
      */
-    public Room getRoom(String roomName) {
+    public Room getRoom(String roomName)
+    {
         return rooms.get(roomName);
     }
 
@@ -70,7 +73,8 @@ public class GameState implements RoomHandler {
      * @return The previous room name.
      */
     @Override
-    public String getPreviousRoom() {
+    public String getPreviousRoom()
+    {
         if (!previousRooms.isEmpty()) {
             return previousRooms.peek().getName().toLowerCase();
         } else {
@@ -81,36 +85,9 @@ public class GameState implements RoomHandler {
     /**
      * @return The player's inventory.
      */
-    public Inventory getInventory() {
+    public Inventory getInventory()
+    {
         return inventory;
-    }
-
-    /**
-     * Gets all available items in the game.
-     * 
-     * @return A hashmap of items.
-     */
-    public HashMap<String, Item> getItems() {
-        return items;
-    }
-
-    /**
-     * Gets a specific item by its name.
-     * 
-     * @param itemName The name of the item.
-     * @return The item with the specified name.
-     */
-    public Item getItem(String itemName) {
-        return items.get(itemName);
-    }
-
-    /**
-     * Gets all the rooms in the game.
-     * 
-     * @return A hashmap of rooms.
-     */
-    public HashMap<String, Room> getRooms() {
-        return rooms;
     }
 
     /**
@@ -118,7 +95,8 @@ public class GameState implements RoomHandler {
      * 
      * @return The current heat.
      */
-    public int getCurrentHeat() {
+    public int getCurrentHeat()
+    {
         return currentHeat;
     }
 
@@ -127,10 +105,11 @@ public class GameState implements RoomHandler {
      * 
      * @return The maximum heat.
      */
-    public int getMaxHeat() {
+    public int getMaxHeat()
+    {
         return maxHeat;
     }
-
+    
     // Setter methods
 
     /**
@@ -138,7 +117,8 @@ public class GameState implements RoomHandler {
      * 
      * @param maxHeat The new maximum heat level.
      */
-    public void setMaxHeat(int maxHeat) {
+    public void setMaxHeat(int maxHeat)
+    {
         this.maxHeat = maxHeat;
     }
 
@@ -147,7 +127,8 @@ public class GameState implements RoomHandler {
      * 
      * @param room The new room.
      */
-    public void setCurrentRoom(Room room) {
+    public void setCurrentRoom(Room room)
+    {
         this.currentRoom = room;
     }
 
@@ -158,7 +139,8 @@ public class GameState implements RoomHandler {
      * 
      * @param heat The amount to adjust the heat by.
      */
-    public void adjustHeat(int heat) {
+    public void adjustHeat(int heat)
+    {
         this.currentHeat += heat;
         if (currentHeat >= maxHeat) {
             currentHeat = maxHeat;
@@ -172,7 +154,8 @@ public class GameState implements RoomHandler {
      * 
      * @param previousRoom The room to add to the stack.
      */
-    public void addRoomToStack(Room previousRoom) {
+    public void addRoomToStack(Room previousRoom)
+    {
         previousRooms.push(previousRoom);
     }
 
@@ -181,7 +164,8 @@ public class GameState implements RoomHandler {
      * 
      * @return A string showing the current and max heat.
      */
-    public String displayHeat() {
+    public String displayHeat()
+    {
         return "Heat: " + getCurrentHeat() + "/" + getMaxHeat();
     }
 
@@ -190,7 +174,8 @@ public class GameState implements RoomHandler {
      * 
      * @return true if the player successfully moved back, false if there are no previous rooms.
      */
-    public boolean back() {
+    public boolean back()
+    {
         if (previousRooms.isEmpty()) {
             return false;
         } else {
@@ -205,10 +190,11 @@ public class GameState implements RoomHandler {
      * @param item The item to check.
      * @return true if the item can be carried, false otherwise.
      */
-    public boolean belowWeightLimit(Item item) {
+    public boolean belowWeightLimit(Item item)
+    {
         // Checks if the sum of all item's weight in inventory plus the weight of the
         // item to be added to the inventory is less than the maximum weight allowed
-        return inventory.getTotalWeight() + item.getWeight() <= maxWeight;
+        return inventory.getTotalWeight() + item.getWeight() <= inventory.getMaxWeight();
     }
 
     /**
@@ -217,7 +203,8 @@ public class GameState implements RoomHandler {
      * @param previousRoom The previous room the player was in.
      * @return true if the encounter was handled and the player moved back, false otherwise.
      */
-    public boolean handleEntityEncounters(Room previousRoom) {
+    public boolean handleEntityEncounters(Room previousRoom)
+    {
         Room currentRoom = getCurrentRoom();
         Deer deer = (Deer) entities.get("deer");
         
@@ -250,7 +237,8 @@ public class GameState implements RoomHandler {
      * @param currentRoom The room where the entity is located.
      * @param itemName The name of the item used to kill the entity.
      */
-    public void handleEntityKill(Entity entity, Room currentRoom, String itemName) {
+    public void handleEntityKill(Entity entity, Room currentRoom, String itemName)
+    {
         if (entity instanceof Deer) { // checks whether we the entity is a Deer class
             Deer deer = (Deer) entity;
             // If we try to kill the Deer using an item, calls the killDeer method within
@@ -276,7 +264,8 @@ public class GameState implements RoomHandler {
      * @param entity The entity which relates to the traversal of the lake
      * @return true if the player can traverse the lake, false otherwise.
      */
-    public boolean canTraverseLake(Room currentRoom, Room previousRoom, Room nextRoom, Entity entity) {
+    public boolean canTraverseLake(Room currentRoom, Room previousRoom, Room nextRoom, Entity entity)
+    {
         Unlockable unlockable = (Unlockable) entity;
         
         // This first check allows us to go backwards if we enter a room with a lake entity in it
@@ -301,7 +290,8 @@ public class GameState implements RoomHandler {
      * 
      * @return true if the player is in the final room, false otherwise.
      */
-    public boolean checkFinalRoom() {
+    public boolean checkFinalRoom()
+    {
         return currentRoom == endingRoom;
     }
 
@@ -310,7 +300,8 @@ public class GameState implements RoomHandler {
      * 
      * @return true if the player has the required item, false otherwise.
      */
-    public boolean checkFinalItem() {
+    public boolean checkFinalItem()
+    {
         return inventory.hasItem("repaired-radio");
     }
 
@@ -319,7 +310,8 @@ public class GameState implements RoomHandler {
      * 
      * @param nextRoom The room to teleport to.
      */
-    public void teleportRandomRoom(Room nextRoom) {
+    public void teleportRandomRoom(Room nextRoom)
+    {
         // This list defines a set of rooms which the player could
         // randomly teleport to.
         List<Room> teleporterRooms = Arrays.asList(
@@ -351,7 +343,8 @@ public class GameState implements RoomHandler {
      * 
      * @param room The new room to set as the next room of the last room on the top of the stack.
      */
-    public void reconfigureStack(Room room) {   
+    public void reconfigureStack(Room room)
+    {   
         // Reconfigures the stack so that the last room in the stack is the new
         // room defined in the parameter
         while (!previousRooms.isEmpty() && previousRooms.peek() != room) {
@@ -373,7 +366,8 @@ public class GameState implements RoomHandler {
      * @return true if the entity can move to the player's room, false otherwise.
      */
     @Override
-    public boolean canMoveTo(MovingEntity movingEntity, String targetRoom, String playerRoom) {
+    public boolean canMoveTo(MovingEntity movingEntity, String targetRoom, String playerRoom)
+    {
         if (movingEntity instanceof Deer) {
             return true; // deers can always move to any room even if a player is there
         } else if (movingEntity instanceof SnowWolf) {
@@ -391,7 +385,8 @@ public class GameState implements RoomHandler {
      * @param nextRoomID The ID of the next room.
      */
     @Override
-    public void moveEntity(MovingEntity entity, String currentRoomID, String nextRoomID) {
+    public void moveEntity(MovingEntity entity, String currentRoomID, String nextRoomID)
+    {
         Room currentEntityRoom = rooms.get(currentRoomID);
         Room nextRoom = rooms.get(nextRoomID);
         

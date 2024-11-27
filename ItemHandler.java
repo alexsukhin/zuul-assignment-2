@@ -4,7 +4,8 @@
  * @author Alexander Sukhin
  * @version 2024.11.26
  */
-public interface ItemHandler {
+public interface ItemHandler
+{
 
     /**
      * Retrieves an item from the inventory by its name
@@ -13,15 +14,6 @@ public interface ItemHandler {
      * @return Gets the item if found, otherwise null.
      */
     Item getItem(String itemName);
-
-    /**
-     * Removes an item from the inventory using Item class, to be used
-     * in removing an item using a String.
-     * 
-     * @param The item to remove.
-     * @return true if the item was successfully removed, otherwise false.
-     */
-    boolean removeItem(Item item);
 
     /**
      * Removes an item from the inventory by its name.

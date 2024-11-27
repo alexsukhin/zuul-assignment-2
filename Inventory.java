@@ -10,10 +10,12 @@ import java.util.HashMap;
  * @author Alexander Sukhin
  * @version 2024.11.26
  */
-public class Inventory implements ItemHandler {
+public class Inventory implements ItemHandler
+{
 
     private List<Item> items; // list of item names represented as inventory
     private HashMap<String, Item> itemCatalog; // map containing all available items in the game, each uniquely identified 
+    private int maxWeight; // maximum weight of the inventory in kilograms
 
     /**
      * Initialises the player's inventory with an item catalogue containing
@@ -22,9 +24,11 @@ public class Inventory implements ItemHandler {
      * @param itemCatalog A hashmap containing all the available items in the game,
      *                    where each item is uniquely identified by a name
      */
-    public Inventory(HashMap<String, Item> itemCatalog) {
+    public Inventory(HashMap<String, Item> itemCatalog)
+    {
         this.items = new ArrayList<>();
         this.itemCatalog = itemCatalog;
+        maxWeight = 20;
     }
 
     // Getter methods
@@ -36,7 +40,8 @@ public class Inventory implements ItemHandler {
      * @return Gets the item if found, otherwise null.
      */
     @Override
-    public Item getItem(String itemName) {
+    public Item getItem(String itemName)
+    {
         for (Item item : items) {
             if (item.getName().equals(itemName)) {
                 return item;
@@ -52,19 +57,29 @@ public class Inventory implements ItemHandler {
      * @return true if the item is in the inventory, otherwise false.
      */
     @Override
-    public boolean hasItem(String itemName) {
+    public boolean hasItem(String itemName)
+    {
         return getItem(itemName) != null;
     }
 
     /**
      * @return The total weight of items in kilograms.
      */
-    public int getTotalWeight() {
+    public int getTotalWeight()
+    {
         int totalWeight = 0;
         for (Item item : items) {
             totalWeight += item.getWeight();
         }
         return totalWeight;
+    }
+    
+    /**
+     * @return The max weight of the inventory in kilograms.
+     */
+    public int getMaxWeight()
+    {
+        return maxWeight;
     }
 
     // Public methods
@@ -75,7 +90,8 @@ public class Inventory implements ItemHandler {
      * @param itemName The name of the item to add to the inventory.
      */
     @Override
-    public void addItem(String itemName) {
+    public void addItem(String itemName)
+    {
         Item item = itemCatalog.get(itemName);
 
         if (item == null) {
@@ -92,7 +108,8 @@ public class Inventory implements ItemHandler {
      * @return true if the item was successfully removed, otherwise false.
      */
     @Override
-    public boolean removeItem(String itemName) {
+    public boolean removeItem(String itemName)
+    {
         Item item = getItem(itemName);
         return item != null && removeItem(item);  // removes item if found
     }
@@ -101,7 +118,8 @@ public class Inventory implements ItemHandler {
      * Display all the items in the inventory if it is not empty.
      * If the inventory is empty, tells the player.
      */
-    public void showInventory() {
+    public void showInventory()
+    {
         if (items.isEmpty()) {
             System.out.println("Your inventory is empty.");
         } else {
@@ -121,7 +139,8 @@ public class Inventory implements ItemHandler {
      * @param The item to remove.
      * @return true if the item was successfully removed, otherwise false.
      */
-    public boolean removeItem(Item item) {
+    private boolean removeItem(Item item)
+    {
         return items.remove(item);  // Helper method to remove the item from the list
     }
 }

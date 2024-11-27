@@ -1,18 +1,12 @@
-/**
+    /**
  * This interface defines methods for managing the movement of entities
  * within different rooms in the game.
  * 
  * @author Alexander Sukhin
  * @version 2024.11.26
  */
-public interface RoomHandler {
-
-    /**
-     * Get the current room where the player or moving entity is located.
-     * 
-     * @return The current Room object the player or entity is in.
-     */
-    Room getCurrentRoom();
+public interface RoomHandler
+{
 
     /**
      * Get the name of the room the player or moving entity was previously in.

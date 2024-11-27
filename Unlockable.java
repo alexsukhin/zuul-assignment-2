@@ -8,7 +8,8 @@
  * @author Alexander Sukhin
  * @version 2024.11.26
  */
-public class Unlockable extends Entity {
+public class Unlockable extends Entity
+{
     
     private String requiredItem;       // stores the required item in order to unlock this entity
     private String lockedMessage;      // message shown when the object is locked
@@ -27,7 +28,8 @@ public class Unlockable extends Entity {
      * @param useItemMessage The message displayed when the required item is used on the object.
      * @param consumeItem A boolean indicating whether the used item should be deleted on use.
      */
-    public Unlockable(String name, String requiredItem, String lockedMessage, String unlockedMessage, String useItemMessage, boolean consumeItem) {
+    public Unlockable(String name, String requiredItem, String lockedMessage, String unlockedMessage, String useItemMessage, boolean consumeItem)
+    {
         super(name);
         this.requiredItem = requiredItem;
         this.lockedMessage = lockedMessage;
@@ -43,35 +45,40 @@ public class Unlockable extends Entity {
      * Checks whether the entity is unlocked or not.
      * @return true if the entity is unlocked, false if it isn't.
      */
-    public boolean isUnlocked() {
+    public boolean isUnlocked()
+    {
         return isUnlocked;
     }
 
     /**
      * @return The name of the required item.
      */
-    public String getRequiredItem() {
+    public String getRequiredItem()
+    {
         return requiredItem;
     }
 
     /**
      * @return The message represented on an unlocked state.
      */
-    public String getUnlockedMessage() {
+    public String getUnlockedMessage()
+    {
         return unlockedMessage;
     }
 
     /**
      * @return The message represented on a locked state.
      */
-    public String getLockedMessage() {
+    public String getLockedMessage()
+    {
         return lockedMessage;
     }
 
     /**
      * @return The message represented when the required item is used on the entity.
      */
-    public String getUseItemMessage() {
+    public String getUseItemMessage()
+    {
         return useItemMessage;
     }
 
@@ -86,7 +93,8 @@ public class Unlockable extends Entity {
      * @param itemHandler The interface responsible for managing the player's inventory.
      * @param itemName The name of the item the player is using to unlock the entity.
      */
-    public void tryUnlock(ItemHandler itemHandler, String itemName) {
+    public void tryUnlock(ItemHandler itemHandler, String itemName)
+    {
         if (isUnlocked()) {
             System.out.println(getUnlockedMessage());
             return; // returns out of function as object is already unlocked
@@ -109,7 +117,8 @@ public class Unlockable extends Entity {
      * displays the locked message.
      */
     @Override
-    public void examine() {
+    public void examine()
+    {
         if (isUnlocked) {
             System.out.println(unlockedMessage);
         } else {
@@ -120,7 +129,8 @@ public class Unlockable extends Entity {
     /**
      * Locks the object
      */
-    public void lock() {
+    public void lock()
+    {
         isUnlocked = false;
     }
     
@@ -129,14 +139,16 @@ public class Unlockable extends Entity {
     /**
      * @return true if the item should be consumed, false otherwise
      */
-    private boolean shouldConsumeItem() {
+    private boolean shouldConsumeItem()
+    {
         return consumeItem;
     }
     
     /**
      * Unlocks the object
      */
-    private void unlock() {
+    private void unlock()
+    {
         isUnlocked = true;
     }
 }

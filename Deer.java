@@ -8,18 +8,20 @@ import java.util.List;
  * @author Alexander Sukhin
  * @version 2024.11.26
  */
-public class Deer extends MovingEntity {
+public class Deer extends MovingEntity
+{
     
     private String knife;  // knife required to kill the Deer
     private boolean alive; // tracks whether the Deer is alive
 
     /**
      * Initialises a new Deer instance.
-     * 
+     *
      * @param rooms A list of names of rooms the Deer can move between.
      * @param knife The name of the item required to kill the Deer.
      */
-    public Deer(List<String> rooms, String knife) {
+    public Deer(List<String> rooms, String knife)
+    {
         super("deer", rooms);
         this.knife = knife;
         this.alive = true;
@@ -39,7 +41,8 @@ public class Deer extends MovingEntity {
      * @param itemName The item name the player is using to attack the Deer.
      * @return true if the Deer is successfully killed, false otherwise.
      */
-    public boolean killDeer(String itemName) {
+    public boolean killDeer(String itemName)
+    {
         if (itemName.equals(knife)) { // checks if the item matches the required item
             System.out.println("You kill the Deer! You gain a piece of leather for your troubles.");
             alive = false; // updates the Deer's status to dead
@@ -54,7 +57,8 @@ public class Deer extends MovingEntity {
     /**
      * @return true if the Deer is alive, false otherwise.
      */
-    public boolean isAlive() {
+    public boolean isAlive()
+    {
         return alive;
     }
 
@@ -62,7 +66,8 @@ public class Deer extends MovingEntity {
      * Provides an action when the entity is examined.
      */
     @Override
-    public void examine() {
-        // No specific action for the Deer
+    public void examine()
+    {
+        System.out.println("The deer seems peaceful, roaming between the rooms.");
     }
 }

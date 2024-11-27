@@ -10,7 +10,8 @@ import java.util.Arrays;
  * @author Alexander Sukhin
  * @version 2024.11.26
  */
-public class EntityFactory {
+public class EntityFactory
+{
 
     /**
      * Generates new entities based on the provided type given to the function to

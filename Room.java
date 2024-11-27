@@ -19,7 +19,7 @@ public class Room {
     private HashMap<String, Room> exits;        // stores exits of this room
     private HashMap<String, Item> items;         // stores items present in the room
     private HashMap<String, Entity> entities;    // stores entities present in the room
-    
+        
     /**
      * Initialises a room.
      * 
@@ -83,6 +83,36 @@ public class Room {
     }
 
     /**
+     * Gets an item from the room by its name.
+     * 
+     * @param itemName The name of the item to get.
+     * @return The item if found, null otherwise.
+     */
+    public Item getItem(String itemName) {
+        return items.get(itemName.toLowerCase());
+    }
+
+    /**
+     * Gets an entity from the room by its name.
+     * 
+     * @param entityName The name of the entity to get.
+     * @return The entity if found, null otherwise.
+     */
+    public Entity getEntity(String entityName) {
+        return entities.get(entityName.toLowerCase());
+    }
+    
+    /**
+     * Gets the exit in the given direction from this room.
+     * 
+     * @param direction The direction of the exit.
+     * @return The room object in the given direction, or null if no room exists there.
+     */
+    public Room getExit(String direction) {
+        return exits.get(direction);
+    } 
+    
+    /**
      * @return The heat level of the room.
      */
     public int getHeat() {
@@ -96,6 +126,43 @@ public class Room {
         return teleporter;
     }
     
+    /**
+     * Gets a string describing the items in the room.
+     * 
+     * @return A string listing all items in the room.
+     */
+    public String getItemString() {
+        String returnString = "";
+        if (!items.isEmpty()) {
+            returnString += "You notice the following items:\n";
+            Set<String> keys = items.keySet();
+            for (String item : keys) {
+                returnString += "- [" + item + "]\n";
+            }
+        }
+        return returnString;
+    }
+
+    /**
+     * Gets a string describing the entities in the room.
+     * 
+     * @return A string listing all entities in the room.
+     */
+    public String getEntitiesString() {
+        String returnString = "Entities:";
+        Set<String> keys = entities.keySet();
+
+        if (keys.isEmpty()) {
+            return "";
+        }
+
+        for (String entity : keys) {
+            returnString += "\n- [" + entity + "]";
+        }
+
+        return returnString;
+    }
+    
     //Setter methods
 
     /**
@@ -105,7 +172,6 @@ public class Room {
     {
         teleporter = false;
     }
-
 
     // Public methods
 
@@ -191,70 +257,5 @@ public class Room {
         return returnString;
     }
 
-    /**
-     * Gets a string describing the items in the room.
-     * 
-     * @return A string listing all items in the room.
-     */
-    public String getItemString() {
-        String returnString = "";
-        if (!items.isEmpty()) {
-            returnString += "You notice the following items:\n";
-            Set<String> keys = items.keySet();
-            for (String item : keys) {
-                returnString += "- [" + item + "]\n";
-            }
-        }
-        return returnString;
-    }
 
-    /**
-     * Gets a string describing the entities in the room.
-     * 
-     * @return A string listing all entities in the room.
-     */
-    public String getEntitiesString() {
-        String returnString = "Entities:";
-        Set<String> keys = entities.keySet();
-
-        if (keys.isEmpty()) {
-            return "";
-        }
-
-        for (String entity : keys) {
-            returnString += "\n- [" + entity + "]";
-        }
-
-        return returnString;
-    }
-
-    /**
-     * Gets the exit in the given direction from this room.
-     * 
-     * @param direction The direction of the exit.
-     * @return The room object in the given direction, or null if no room exists there.
-     */
-    public Room getExit(String direction) {
-        return exits.get(direction);
-    }
-
-    /**
-     * Gets an item from the room by its name.
-     * 
-     * @param itemName The name of the item to get.
-     * @return The item if found, null otherwise.
-     */
-    public Item getItem(String itemName) {
-        return items.get(itemName.toLowerCase());
-    }
-
-    /**
-     * Gets an entity from the room by its name.
-     * 
-     * @param entityName The name of the entity to get.
-     * @return The entity if found, null otherwise.
-     */
-    public Entity getEntity(String entityName) {
-        return entities.get(entityName.toLowerCase());
-    }
 }

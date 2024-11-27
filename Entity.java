@@ -5,7 +5,8 @@
  * @author Alexander Sukhin
  * @version 2024.11.26  
  */
-public abstract class Entity {
+public abstract class Entity
+{
 
     // The name of the entity
     private String name;
@@ -15,7 +16,8 @@ public abstract class Entity {
      * 
      * @param name The name of the entity.
      */
-    public Entity(String name) {
+    public Entity(String name)
+    {
         this.name = name;
     }
 

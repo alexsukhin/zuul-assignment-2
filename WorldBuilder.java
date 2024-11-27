@@ -9,7 +9,8 @@ import java.util.ArrayList;
  */
 public class WorldBuilder
 {
-    public HashMap<String, Room> createRooms() {
+    public HashMap<String, Room> createRooms()
+    {
         HashMap<String, Room> rooms = new HashMap<>();
 
         // Create rooms with concise, immersive descriptions and names as separate parameters
@@ -58,7 +59,8 @@ public class WorldBuilder
         return rooms;
     }
 
-    public HashMap<String, Item> createItems(HashMap<String, Room> rooms) {
+    public HashMap<String, Item> createItems(HashMap<String, Room> rooms)
+    {
         HashMap<String, Item> items = new HashMap<>();
         
         items.put("radio", new Item("Radio", "An old radio transmitter. It looks like it could be repaired.", 3, true));
@@ -91,7 +93,8 @@ public class WorldBuilder
         return items;
     }
     
-    public HashMap<String, Entity> createEntities(HashMap<String, Room> rooms, HashMap<String, Item> items) {
+    public HashMap<String, Entity> createEntities(HashMap<String, Room> rooms, HashMap<String, Item> items)
+    {
         HashMap<String, Entity> entities = new HashMap<>();
         
         // Create entities using the factory
